@@ -13,6 +13,11 @@ const mapState = ({ login }) => ({
 const mapDispatch = ({ login }) => ({
 
 });
+
+const [state , setState] = useState({
+  value: 1,
+
+});
 const layout = {
   labelAlign:'left',
   labelCol: {
@@ -40,9 +45,7 @@ const onChange = e => {
   });
 }; 
 const Login = (props) => {
-  state = {
-    value: 1,
-  };
+ 
     return (
       <div className="loginPage">
         <div className="wapper">

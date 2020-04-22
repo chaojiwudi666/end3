@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
+import Login from "./views/Login";
 import myRoute from './config/router';
 import './App.scss'
 function App() {
@@ -10,7 +11,13 @@ function App() {
       <Provider store={store}>
       <HashRouter>
         <Switch>
-        {
+        <Route
+        path="/login"
+        exact="true"
+        component={Login}
+   
+      />
+        {/* {
             myRoute.map((item,index) => (
               <Route
                 path={item.path}
@@ -19,7 +26,7 @@ function App() {
                 key={index}
               />
             ))
-          }
+          } */}
           <Redirect from="/" to="/home" exact />
         </Switch>
       </HashRouter>
