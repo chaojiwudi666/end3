@@ -1,0 +1,135 @@
+export default [{
+  key: '/login',
+  name: 'login',
+  path: '/login',
+  exact: true,
+  component: 'views/Login',
+  model: 'store/login'
+}, {
+  key: '/findPass',
+  name: 'findPass',
+  path: '/findPass',
+  exact: true,
+  component: 'views/FindPass',
+  model: 'store/findPass'
+}, {
+  key: '/publish',
+  name: 'publish',
+  path: '/publish',
+  exact: true,
+  component: 'views/Publish',
+  model: 'store/publish'
+}, {
+  key: '/leaderList',
+  name: 'leaderList',
+  path: '/leaderList',
+  exact: true,
+  component: 'views/LeaderList',
+  model: 'store/leaderList'
+}, {
+  key: '/reportedPage',
+  name: 'reportedPage',
+  path: '/reportedPage',
+  exact: true,
+  component: 'views/ReportedPage',
+  model: 'store/reportedPage'
+}, {
+  key: '/normalList',
+  name: 'normalList',
+  path: '/normalList',
+  exact: true,
+  component: 'views/NormalList',
+  model: 'store/normalList'
+}, {
+  key: '/specialReports',
+  name: 'specialReports',
+  path: '/specialReports',
+  exact: true,
+  component: 'views/SpecialReports',
+  model: 'store/specialReports'
+}, {
+  key: '/detailPage',
+  name: 'detailPage',
+  path: '/detailPage',
+  exact: true,
+  component: 'views/DetailPage',
+  model: 'store/detailPage'
+}, {
+  key: '/UserRecord',
+  name: 'UserRecord',
+  path: '/UserRecord',
+  exact: true,
+  component: 'views/UserRecord',
+  model: 'store/UserRecord'
+}, {
+  key: '/hotActivities',
+  name: 'hotActivities',
+  path: '/hotActivities/:id/:title',
+  exact: true,
+  component: 'views/HotActivities',
+  model: 'store/hotActivities'
+}, {
+  key: '/home',
+  name: 'home',
+  path: '/home',
+  exact: true,
+  component: 'views/home',
+  model: 'store/home'
+}, {
+  key: '/searchPage',
+  name: '/searchPage',
+  path: '/searchPage',
+  exact: true,
+  component: 'views/SearchPage',
+  model: 'store/searchPage'
+}, {
+  key: '/togetherForm',
+  name: '/togetherForm',
+  path: '/togetherForm/:Id',
+  exact: true,
+  component: 'views/TogetherForm',
+  model: 'store/togetherForm'
+}, {
+  key: '/personalCenter',
+  name: '/personalCenter',
+  path: '/personalCenter',
+  exact: true,
+  component: 'views/PersonalCenter',
+  model: 'store/personalCenter'
+}, {
+  key: '/onlineList',
+  name: '/onlineList',
+  path: '/onlineList',
+  exact: true,
+  component: 'views/OnlineList',
+  model: 'store/onlineList'
+}, {
+  key: '/farmingDetial',
+  name: '/farmingDetial',
+  path: '/farmingDetial/:id',
+  exact: true,
+  component: 'views/FarmingDetial',
+  model: 'store/farmingDetial'
+}, {
+  key: '/linkPage',
+  name: '/linkPage',
+  path: '/linkPage',
+  exact: true,
+  component: 'views/LinkPage',
+  model: 'store/linkPage',
+}, {
+  key: '/navigationPage',
+  name: '/navigationPage',
+  path: '/navigationPage/:Latitude/:Longitude',
+  exact: true,
+  component: 'views/NavigationPage',
+  model: 'store/navigationPage',
+}, {
+  key: '/showListPage',
+  name: '/showListPage',
+  path: '/showListPage',
+  exact: true,
+  component: 'views/ShowListPage',
+  model: 'store/showListPage',
+}];
+//1.新页面在这里添加路由
