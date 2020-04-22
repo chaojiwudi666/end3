@@ -1,10 +1,10 @@
 
 import bgImg from '../../static/images/login_bgimg.png';
 import './index.scss';
-import React , { useEffect,useRef, useState } from './node_modules/react';
-import { withRouter } from './node_modules/react-router-dom';
-import { connect } from './node_modules/react-redux';
-import { Form, Input, Button, Checkbox ,Radio  } from './node_modules/antd';
+import React , { useEffect,useRef, useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Form, Input, Button, Checkbox ,Radio  } from 'antd';
 //4.1对应映射的字段 
 const mapState = ({ login }) => ({
 
@@ -14,38 +14,34 @@ const mapDispatch = ({ login }) => ({
 
 });
 
-const [state , setState] = useState({
-  value: 1,
 
-});
-const layout = {
-  labelAlign:'left',
-  labelCol: {
-    span: 8,
-  },
 
-};
-const tailLayout = {
-  wrapperCol: {
-    offset: 8,
-    span: 16,
-  },
-};
-const onFinish = values => {
-  
-};
 
-const onFinishFailed = errorInfo => {
-  console.log('Failed:', errorInfo);
-};
-const onChange = e => {
-  console.log('radio checked', e.target.value);
-  this.setState({
-    value: e.target.value,
-  });
-}; 
 const Login = (props) => {
- 
+  const [state,setState] = useState({
+    value: 1,
+  
+  });
+  const layout = {
+    labelAlign:'left',
+    labelCol: {
+      span: 8,
+    },
+  
+  };
+  const tailLayout = {
+    wrapperCol: {
+      offset: 8,
+      span: 16,
+    },
+  };
+  const onFinish = values => {
+    
+  };
+  
+  const onFinishFailed = errorInfo => {
+    console.log('Failed:', errorInfo);
+  };
     return (
       <div className="loginPage">
         <div className="wapper">
