@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
-import Login from "./views/Login";
+import Login from "./views/Login/index";
+import Home from "./views/Home/index";
 import myRoute from './config/router';
 import './App.scss'
 function App() {
@@ -15,6 +16,12 @@ function App() {
         path="/login"
         exact="true"
         component={Login}
+   
+      />
+      <Route
+        path="/home"
+        exact="true"
+        component={Home}
    
       />
         {/* {
