@@ -6,12 +6,12 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Form, Input, Button, Checkbox ,Radio  } from 'antd';
 //4.1对应映射的字段 
-const mapStateToProps = ({login}) => ({
+const mapState = ({login}) => ({
   loginState:login.loginState
 
 });
 //4.2需要使用的http api接口 和 需要使用的方法
-const mapDispatchToProps = ({login}) => ({
+const mapDispatch = ({login}) => ({
   userToLogin:login.userToLogin
 });
 
@@ -118,5 +118,5 @@ const chooseType = (e)=>{
 }
 
 export default connect(
-  mapStateToProps, mapDispatchToProps
+  mapState, mapDispatch
 )(withRouter(Login));
