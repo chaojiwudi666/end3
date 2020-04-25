@@ -6,11 +6,12 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Form, Input, Button, Checkbox ,Radio  } from 'antd';
 //4.1对应映射的字段 
-const mapState = (login) => ({
+const mapStateToProps = ({login}) => ({
+  loginState:login.loginState
 
 });
 //4.2需要使用的http api接口 和 需要使用的方法
-const mapDispatch = (login) => ({
+const mapDispatchToProps = ({login}) => ({
   userToLogin:login.userToLogin
 });
 
@@ -42,7 +43,8 @@ const chooseType = (e)=>{
       ...values,
       // peopleType:state.peopleType
     }
-    props.userToLogin(params);
+    // props.userToLogin(params);
+    console.log(props);
 
   };
   
@@ -89,8 +91,9 @@ const chooseType = (e)=>{
                 </Form.Item>
                 <Form.Item 
                   label=""
-                  name="peopleType" >  
-                  <Radio.Group defaultValue={1} onChange={(e)=>chooseType(e)} value={state.peopleType}>
+                  name="peopleType" 
+                  >  
+                  <Radio.Group onChange={(e)=>chooseType(e)} initialValues="1" value={state.peopleType}>
                     <Radio value={1}>管理员</Radio>
                     <Radio value={2}>宿管员</Radio>
                     <Radio value={3}>学生</Radio>
@@ -115,5 +118,5 @@ const chooseType = (e)=>{
 }
 
 export default connect(
-  mapState, mapDispatch
+  mapStateToProps, mapDispatchToProps
 )(withRouter(Login));

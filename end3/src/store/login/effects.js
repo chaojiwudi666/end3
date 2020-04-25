@@ -11,8 +11,11 @@ message.config({
 const effects = dispatch => ({
     async userToLogin(prams, state) {
        
-        
-        let res = await userLogin(prams);
+        var data = {
+            phone:prams.phone,
+            password:Action.MD5(prams.password)
+        }
+        let res = await userLogin(data);
         console.log(res);
         if(res.data.Status!=1){
             message.error(res.data.Message);
