@@ -10,7 +10,7 @@ const myRoute = [{
   name: 'home',
   path: '/home',
   exact: true,
-  component: 'views/home',
+  component: 'views/Home',
   model: 'store/home'
 }]
 export default myRoute;

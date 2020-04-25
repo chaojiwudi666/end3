@@ -5,11 +5,11 @@ import HeadNav from '../../components/HeadNav/index';
 import LeftSubMenu from '../../components/LeftSubMenu/index.jsx';
 import './index.scss';
 //4.1对应映射的字段 
-const mapState = (home) => ({
+const mapState = ({home}) => ({
 
 });
 //4.2需要使用的http api接口 和 需要使用的方法
-const mapDispatch = ( home ) => ({
+const mapDispatch = ( {home} ) => ({
 
 });
 
@@ -22,12 +22,12 @@ const Home = (props)=> {
             <LeftSubMenu/>
            
           </div>
-          <div className="main-right">
+          {/* <div className="main-right">
             <div className="head-nav">
               <HeadNav/>
             </div>
            
-          </div>
+          </div> */}
       </div>
     );
   }

@@ -19,6 +19,7 @@ function App() {
         {
             myRoute.map(item => (
               <Route
+              key={item.path}
                 path={item.path}
                 exact={item.exact}
                 component={loadableComponent(item.component, {

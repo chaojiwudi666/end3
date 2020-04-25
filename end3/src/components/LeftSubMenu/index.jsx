@@ -5,7 +5,7 @@ const LeftSubMenu = (props)=> {
 
 
     return (
-      <div></div>
+      <div className="leftMenu"></div>
     );
   }
 
