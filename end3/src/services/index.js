@@ -1,4 +1,4 @@
-import axios from '@services/axios';
+import axios from './axios';
 
 //获取农户详情
 export const userLogin= prams => axios.get('/logon', {params: prams});
