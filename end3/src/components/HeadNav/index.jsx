@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React , { useEffect,useRef, useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Menu } from 'antd';
 import {
   MailOutlined,
@@ -6,21 +8,21 @@ import {
   SettingOutlined,
 } from '@ant-design/icons';
 const { SubMenu } = Menu;
-class MainLayout extends Component {
-    state = {
-        current: 'mail',
-      };
-      handleClick = e => {
+const MainLayout =()=> {
+    const [state,setState] =useState({
+      current: 'mail',
+    }); 
+    const  handleClick = e => {
         console.log('click ', e);
-        this.setState({
+        setState({
           current: e.key,
         });
       };
-  render () {
+  
     return (
       <div className="mainLayout">
           <div className='head-wrap'>
-          <Menu onClick={this.handleClick} selectedKeys={[this.state.current]} mode="horizontal">
+          <Menu onClick={(e)=>handleClick(e)} selectedKeys={[state.current]} mode="horizontal">
         <Menu.Item key="mail">
           <MailOutlined />
           Navigation One
@@ -64,7 +66,7 @@ class MainLayout extends Component {
 
       </div>
     );
-  }
+  
 
 }
 
