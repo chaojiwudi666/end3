@@ -21,6 +21,7 @@ function App() {
               <Route
                 path={item.path}
                 exact={item.exact}
+                key={item.path}
                 component={loadableComponent(item.component, {
                   model: item.model,
                   loadingType: 'full'

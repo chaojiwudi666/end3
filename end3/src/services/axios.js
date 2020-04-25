@@ -15,8 +15,8 @@ axiosInstance.interceptors.request.use(config => {
     if( config.url.indexOf('http')>-1){
 
     }else{
-      config.url = `/Service${config.url}`;
-      config.headers['token'] = sessionStorage.getItem("token");;
+      // config.url = `/Service${config.url}`;
+      // config.headers['token'] = sessionStorage.getItem("token");;
     }
    
   return config;

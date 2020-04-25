@@ -43,7 +43,7 @@ const chooseType = (e)=>{
       ...values,
       // peopleType:state.peopleType
     }
-    // props.userToLogin(params);
+    props.userToLogin(params);
     console.log(props);
 
   };
