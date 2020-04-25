@@ -6,12 +6,12 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Form, Input, Button, Checkbox ,Radio  } from 'antd';
 //4.1对应映射的字段 
-const mapState = ({ login }) => ({
+const mapState = (login) => ({
 
 });
 //4.2需要使用的http api接口 和 需要使用的方法
-const mapDispatch = ({ login }) => ({
-
+const mapDispatch = (login) => ({
+  userToLogin:login.userToLogin
 });
 
 
@@ -19,7 +19,7 @@ const mapDispatch = ({ login }) => ({
 
 const Login = (props) => {
   const [state,setState] = useState({
-    value: 1,
+    peopleType:1
   
   });
   const layout = {
@@ -27,21 +27,25 @@ const Login = (props) => {
     labelCol: {
       span: 8,
     },
-  
+
   };
-  const tailLayout = {
-    wrapperCol: {
-      offset: 8,
-      span: 16,
-    },
-  };
+const chooseType = (e)=>{
+ 
+  setState({
+    ...state,
+    peopleType:e.target.value
+  });
+}
   const onFinish = values => {
-    
+    console.log(values);
+    let params = {
+      ...values,
+      // peopleType:state.peopleType
+    }
+    props.userToLogin(params);
+
   };
   
-  const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-  };
     return (
       <div className="loginPage">
         <div className="wapper">
@@ -56,7 +60,7 @@ const Login = (props) => {
                   remember: true,
                 }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
+            
               >
                 <Form.Item
                   label="账号"
@@ -64,11 +68,11 @@ const Login = (props) => {
                   rules={[
                     {
                       required: true,
-                      message: 'Please input your username!',
+                      message: '账号不能为空',
                     },
                   ]}
                 >
-                  <Input />
+                  <Input placeholder="请输入账号"/>
                 </Form.Item>
 
                 <Form.Item
@@ -77,16 +81,16 @@ const Login = (props) => {
                   rules={[
                     {
                       required: true,
-                      message: 'Please input your password!',
+                      message: '密码不能为空',
                     },
                   ]}
                 >
-                  <Input.Password />
+                  <Input.Password placeholder="请输入密码"/>
                 </Form.Item>
                 <Form.Item 
                   label=""
                   name="peopleType" >  
-                  <Radio.Group name="radiogroup" defaultValue={1} >
+                  <Radio.Group defaultValue={1} onChange={(e)=>chooseType(e)} value={state.peopleType}>
                     <Radio value={1}>管理员</Radio>
                     <Radio value={2}>宿管员</Radio>
                     <Radio value={3}>学生</Radio>
