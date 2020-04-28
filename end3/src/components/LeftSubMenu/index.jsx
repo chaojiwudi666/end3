@@ -1,73 +1,76 @@
 import React , { useEffect,useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Menu } from 'antd';
-import { AppstoreOutlined, MailOutlined, SettingOutlined,BankOutlined } from '@ant-design/icons';
+import { ToolOutlined,SolutionOutlined,UserAddOutlined, ThunderboltOutlined,SettingOutlined,BarsOutlined,ShopOutlined,SafetyOutlined,BankOutlined} from '@ant-design/icons';
 import "./index.scss";
 const { SubMenu } = Menu;
 
-const imgObj = [{
-  key:"sub1",
-  img: <AppstoreOutlined/>
-},{
-  key:"sub2",
-  img: <AppstoreOutlined/>
-},{
-  key:"sub3",
-  img: <AppstoreOutlined/>
-},{
-  key:"sub4",
-  img: <AppstoreOutlined/>
-},{
-  key:"sub5",
-  img: <AppstoreOutlined/>
-},{
-  key:"sub6",
-  img: <AppstoreOutlined/>
-},{
-  key:"sub7",
-  img: <AppstoreOutlined/>
-},{
-  key:"sub8",
-  img: <AppstoreOutlined/>
-},{
-  key:"sub9",
-  img: <AppstoreOutlined/>
-}];
+// const imgObj = [{
+//   key:"sub1",
+//   img: <AppstoreOutlined/>
+// },{
+//   key:"sub2",
+//   img: <AppstoreOutlined/>
+// },{
+//   key:"sub3",
+//   img: <AppstoreOutlined/>
+// },{
+//   key:"sub4",
+//   img: <AppstoreOutlined/>
+// },{
+//   key:"sub5",
+//   img: <AppstoreOutlined/>
+// },{
+//   key:"sub6",
+//   img: <AppstoreOutlined/>
+// },{
+//   key:"sub7",
+//   img: <AppstoreOutlined/>
+// },{
+//   key:"sub8",
+//   img: <AppstoreOutlined/>
+// }];
 
 const LeftSubMenu = (props)=> {
-  console.log(props);
+  console.log(props.location.pathname.split("/")[1]);
+  let current = props.location.pathname.split("/")[1];
+
   const [state,setState] = useState({
-    current:['systemManager'],
-    rootSubmenuKeys : [{
-      key:'home',
-      title:"首页"
-    },{
-      key:'systemManager',
-      title:'系统管理',
-    }, {
-      key:'sub2',
-      title:'电费管理'
-    }, {
-      key:'sub3',
-      title:'系统管理'
-    }, {
-      key:'sub4',
-      title:'个人信息管理'
-    }, {
-      key:'sub5',
-      title:'寝室信息管理'
-    }, {
-      key:'sub6',
-      title:'卫生管理'
-    }, {
-      key:'sub7',
-      title:'来访人员管理'
-    }, {
-      key:'sub8',
-      title:'报修管理'
-    }],
+    current:[current],
+    rootSubmenuKeys:props.data
+    // rootSubmenuKeys : [{
+    //   key:'home',
+    //   title:"首页"
+    // },{
+    //   key:'systemManager',
+    //   title:'系统管理',
+    // }, {
+    //   key:'sub2',
+    //   title:'电费管理'
+    // }, {
+    //   key:'sub4',
+    //   title:'个人信息管理'
+    // }, {
+    //   key:'sub5',
+    //   title:'寝室信息管理'
+    // }, {
+    //   key:'sub6',
+    //   title:'卫生管理'
+    // }, {
+    //   key:'sub7',
+    //   title:'来访人员管理'
+    // }, {
+    //   key:'sub8',
+    //   title:'报修管理'
+    // }],
 
   });
+  useEffect(()=>{
+    setState({
+      ...state,
+      current
+    });
+  },[props.location.pathname]);
 const handleClick = (e)=>{
   console.log(props);
   setState({
@@ -101,7 +104,7 @@ const handleClick = (e)=>{
                 
               >
                 <span>
-                    {imgObj[index].img}
+                    {item.icon}
                 <span>{item.title}</span>
                   </span>
                 {/* <Menu.Item key="1">Option 1</Menu.Item>

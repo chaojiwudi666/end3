@@ -19,8 +19,11 @@ html,body,#root,.root{
                 right: 30px;
                 height: 100%;
                 line-height: 50px;
-                font-size: 28px;
+                font-size: 20px;
                 font-weight: 500;
+                .dropdown{
+                    margin-left: 10px;
+                }
                 span{
                     margin-left: 20px;
                 }

@@ -8,7 +8,7 @@ export const state = {
 };
 
 export default {
-  name: 'home',
+  name: 'dormManager',
   state,
   reducers,
   effects

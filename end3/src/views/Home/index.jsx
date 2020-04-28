@@ -2,30 +2,74 @@ import React , { useEffect,useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Breadcrumb } from 'antd';
-import { HomeOutlined, UserOutlined,AppstoreOutlined,BarsOutlined} from '@ant-design/icons';
+
+import { ToolOutlined,SolutionOutlined,UserAddOutlined, ThunderboltOutlined,SettingOutlined,ShopOutlined,SafetyOutlined, UserOutlined,AppstoreOutlined,BarsOutlined} from '@ant-design/icons';
 import './index.scss';
 import userHeadImg from "../../static/images/user-header.png";
 import Actions from "../../utils"
 //4.1对应映射的字段 
 const mapState = ({home}) => ({
-
+  data :home.data
 });
 //4.2需要使用的http api接口 和 需要使用的方法
 const mapDispatch = ( {home} ) => ({
 
 });
-
+const data = [{
+  path:"/home",
+  icon:<BarsOutlined />,
+  title:"首页",
+  key:"home"
+},{
+  path:"/systemManager",
+  icon:<SettingOutlined />,
+  title:"系统管理",
+  key:"systemManager"
+},{
+  path:"/electricManager",
+  icon:<ThunderboltOutlined />,
+  title:"电费管理",
+  key:"electricManager"
+},{
+  path:"/userInfoManager",
+  icon:<UserAddOutlined />,
+  title:"个人信息管理",
+  key:"userInfoManager"
+},{
+  path:"/dormManager",
+  icon:<ShopOutlined />,
+  title:"寝室信息管理",
+  key:"dormManager"
+},{
+  path:"/hygieneManager",
+  icon:<SafetyOutlined />,
+  title:"卫生管理",
+  key:"hygieneManager"
+},{
+  path:"/visitManager",
+  icon:<SolutionOutlined />,
+  title:"来访人员管理",
+  key:"visitManager"
+},{
+  path:"/repairManager",
+  icon:<ToolOutlined />,
+  title:"报修管理",
+  key:"repairManager"
+}]
 const Home = (props)=> {
-  const [nowTime,setNowTime] = useState();
+  const [nowTime=Actions.getNowTime(),setNowTime] = useState();
+  
   useEffect(() => {
     let Timer;
-    clearInterval(Timer);
+   
     Timer = setInterval((function() {
       setNowTime(Actions.getNowTime());
     }), 1000)
-    
+    return () => clearInterval(Timer);
   }, []);
-
+const navClick=(item)=>{
+  props.history.push(item.path);
+}
     return (
       <div className="homePage">
         <div className="userInfo">
@@ -53,8 +97,24 @@ const Home = (props)=> {
             <AppstoreOutlined />
             <span className="navInfo_title_detail">宿舍信息管理系统</span>
           </p>
-          <ul className="Nav_list_wrap">
-            <li></li>
+          <ul className="Nav_list_wrap clearfix">
+            {
+              data.map((item)=>{
+                return (
+                  <li key={item.key} onClick={()=>{
+                    navClick(item)
+                  }}>
+                    <div className="icon_wrap">
+                        {item.icon}
+                    </div>
+                      
+                      <div className="nav_title_wrap">
+                        {item.title}
+                      </div>
+                  </li>
+                );
+              })
+            }
           </ul>
 
         </div>

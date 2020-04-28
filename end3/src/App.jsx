@@ -1,9 +1,7 @@
 import React, { useEffect,useState } from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { HomeOutlined, UserOutlined,AppstoreOutlined,BarsOutlined} from '@ant-design/icons';
-import {
-  TeamOutlined
-} from '@ant-design/icons';
+import { TeamOutlined,DownOutlined,ToolOutlined,SolutionOutlined,UserAddOutlined, ThunderboltOutlined,SettingOutlined,BarsOutlined,ShopOutlined,SafetyOutlined} from '@ant-design/icons';
+import { Menu, Dropdown } from 'antd';
 import { Provider } from 'react-redux';
 import store from './store';
 // import Login from "./views/Login/index";
@@ -28,45 +26,49 @@ const data = [{
   key:"home"
 },{
   path:"/systemManager",
-  icon:<BarsOutlined />,
+  icon:<SettingOutlined />,
   title:"系统管理",
   key:"systemManager"
 },{
-  path:"/home",
-  icon:<BarsOutlined />,
+  path:"/electricManager",
+  icon:<ThunderboltOutlined />,
   title:"电费管理",
-  key:"home"
+  key:"electricManager"
 },{
-  path:"/home",
-  icon:<BarsOutlined />,
-  title:"首页",
-  key:"home"
+  path:"/userInfoManager",
+  icon:<UserAddOutlined />,
+  title:"个人信息管理",
+  key:"userInfoManager"
 },{
-  path:"/home",
-  icon:<BarsOutlined />,
-  title:"首页",
-  key:"home"
+  path:"/dormManager",
+  icon:<ShopOutlined />,
+  title:"寝室信息管理",
+  key:"dormManager"
 },{
-  path:"/home",
-  icon:<BarsOutlined />,
-  title:"首页",
-  key:"home"
+  path:"/hygieneManager",
+  icon:<SafetyOutlined />,
+  title:"卫生管理",
+  key:"hygieneManager"
 },{
-  path:"/home",
-  icon:<BarsOutlined />,
-  title:"首页",
-  key:"home"
+  path:"/visitManager",
+  icon:<SolutionOutlined />,
+  title:"来访人员管理",
+  key:"visitManager"
 },{
-  path:"/home",
-  icon:<BarsOutlined />,
-  title:"首页",
-  key:"home"
-},{
-  path:"/home",
-  icon:<BarsOutlined />,
-  title:"首页",
-  key:"home"
-},]
+  path:"/repairManager",
+  icon:<ToolOutlined />,
+  title:"报修管理",
+  key:"repairManager"
+}]
+const menu = (
+ 
+    <div className="layoutBtn_wrap">
+        <a href="/login">
+          退出登录
+        </a>
+    </div>
+  )
+
   return (
     <div className="root">
       <Provider store={store}>
@@ -87,14 +89,18 @@ const data = [{
             <React.Fragment>
               <div className="mainLayout">
                 <div className="leftLayout">
-                  <LeftSubMenu />
+                  <LeftSubMenu data={data}/>
                 </div>
 
                 <div className="rightLayout">
                   <div className="head-nav">
                     <div className="userName">
                       <TeamOutlined />
-                      <span>dsh</span>
+                      <Dropdown overlay={menu} className="dropdown">
+                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                          dsh <DownOutlined />
+                        </a>
+                      </Dropdown>
                     </div>
 
                   </div>

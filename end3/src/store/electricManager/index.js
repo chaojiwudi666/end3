@@ -8,7 +8,7 @@ export const state = {
 };
 
 export default {
-  name: 'home',
+  name: 'electricManager',
   state,
   reducers,
   effects
