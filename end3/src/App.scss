@@ -3,3 +3,29 @@ html,body,#root,.root{
     width: 100%;
     height: 100%;
 }
+.mainLayout{
+    display: flex;
+    .leftLayout{
+        width: 20%;
+    }
+    .rightLayout{
+        width: 80%;
+        .head-nav{
+            height: 50px;        
+            border-bottom: 1px solid #000;
+
+            .userName{
+                position: absolute;
+                right: 30px;
+                height: 100%;
+                line-height: 50px;
+                font-size: 28px;
+                font-weight: 500;
+                span{
+                    margin-left: 20px;
+                }
+            }
+        }
+
+    }
+}

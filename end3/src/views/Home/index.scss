@@ -1,15 +1,65 @@
 .homePage{
     width: 100%;
-    background-color: #000;
-    .main-left{
-        width: 20%;
-    
-    
+    padding: 30px;
+   
+    .userInfo{
+        width: 100%;
+        // margin: 30px;
+       
+        p{
+            font-size: 16px;
+            font-weight: 500;
+            .sText{
+                margin-left: 10px;
+            }
+            
+        }
+        .head-bottom{
+            width: 100%;
+            display: flex;
+            padding-bottom:10px;
+            justify-content: space-between;
+            border-bottom: 1px solid #ccc;
+            .lineLeft{
+                display: flex;
+                img{
+                    width: 80px;
+                    height: 80px;
+                }
+                .userDetail{
+                    margin-left: 30px;
+                    font-size: 20px;
+                    font-weight: 500;
+                    .download{
+                        margin-top: 20px;
+                        a{
+                            font-size: 18px;
+                            font-weight: 400;
+                            color: #0065D9;
+                        }
+                        
+                    }
+                }
+            }
+            .lineRight{
+                margin-right: 50px;
+                .time{
+                    font-size: 20px;
+                }
+            }
+        }
     }
-    .main-right{
-        width: 80%;
-    
-    
+    .navInfo{
+     
+            
+        .navInfo_title{
+            margin-top: 20px;
+            font-size: 18px;
+            .navInfo_title_detail{
+                margin-left: 20px;
+            }
+        }
+        
     }
 
 

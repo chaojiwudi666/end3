@@ -12,8 +12,8 @@ const effects = dispatch => ({
     async userToLogin(prams, state) {
        
         var data = {
-            phone:prams.phone,
-            password:Action.MD5(prams.password)
+            phone:prams.username,
+            password:prams.password
         }
         let res = await userLogin(data);
         console.log(res);

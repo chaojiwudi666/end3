@@ -1,4 +1,17 @@
 import CryptoJS from 'crypto-js';
+const getNowTime = ()=> {
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let nowDate = date.getDate();
+    let hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+    let minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    let second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+    //毫秒
+    // let milliSeconds = date.getMilliseconds();
+    var currentTime = year+'-'+month + '-' + nowDate + ' ' + hour + ':' + minute + ':' + second ;
+    return currentTime;
+  };
 const DES = (string) => {
     let key = "apipartyxinhuaapp1234567";
     let base64 = CryptoJS.enc.Utf8.parse(key);
@@ -93,6 +106,7 @@ const saveLogin = () =>{
     sessionStorage.setItem('isLogin',true);
 }
 var Actions = {
+    getNowTime:getNowTime,
     isEmptyObject:isEmptyObject,
     setCookie: setCookie,
     getCookie: getCookie,
