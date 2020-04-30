@@ -50,7 +50,9 @@ const noLoading = () => {
  * @param {String|Array} param2.model redux model路径，基于src的路径，例：'store/login'
  * @param {String} param2.loadingType loading类型，full(全屏)|page(单页)，默认full
  */
-const loadableComponent = (importComponent, { model, loadingType = 'page' } = {}) => {
+const loadableComponent = (importComponent, { model, loadingType = 'page' } = {},data) => {
+  console.log(data);
+  let change = data;
   let loading = null;
   switch (loadingType) {
     case 'page':
@@ -92,7 +94,7 @@ const loadableComponent = (importComponent, { model, loadingType = 'page' } = {}
       }
       const { Component: { default: component } } = loaded;
       let Component = component;
-      return <Component {...props}/>;
+      return <Component {...props} change={change}/>;
     },
     loading
   });

@@ -15,10 +15,11 @@ import './App.scss';
 
 const App = () => {
   const [isLogin,setIsLogin] = useState();
-  useEffect(() => {
-    
-    setIsLogin(sessionStorage.getItem("isLogin"));
-}, [isLogin]);
+  const changeLoginStatus = (val)=>{
+    console.log(val);
+    setIsLogin(val);
+  }
+  
 const data = [{
   path:"/home",
   icon:<BarsOutlined />,
@@ -68,7 +69,10 @@ const menu = (
         </a>
     </div>
   )
-
+console.log(loadableComponent('views/Login', {
+  model: 'store/login',
+  loadingType: 'full'
+}));
   return (
     <div className="root">
       <Provider store={store}>
@@ -83,7 +87,8 @@ const menu = (
               component={loadableComponent('views/Login', {
                 model: 'store/login',
                 loadingType: 'full'
-              })}
+              },changeLoginStatus)}
+             
 
             />
             <React.Fragment>
@@ -107,7 +112,7 @@ const menu = (
                   {
                     myRoute.map(item => {
                       return (
-                        sessionStorage.getItem("isLogin") === "isLogin" ?
+                        isLogin === "isLogin" ?
                           <Route
                             key={item.path}
                             path={item.path}

@@ -38,13 +38,14 @@ const chooseType = (e)=>{
   });
 }
   const onFinish = values => {
-    console.log(values);
+    console.log(props);
     let params = {
       ...values,
       // peopleType:state.peopleType
     }
     // props.userToLogin(params);
     sessionStorage.setItem("isLogin","isLogin");
+    props.change(sessionStorage.getItem("isLogin"));
     props.history.push("/home");
   
     console.log(props);
