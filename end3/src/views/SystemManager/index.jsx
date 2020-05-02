@@ -1,102 +1,130 @@
-import React , { useEffect,useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Radio, Divider } from 'antd';
+import { Table, Radio, Divider, Button, Modal } from 'antd';
 
-import { HomeOutlined, UserOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, PlusOutlined, } from '@ant-design/icons';
 import './index.scss';
 //4.1对应映射的字段 
-const mapState = ({systemManager}) => ({
+const mapState = ({ systemManager }) => ({
+
+  data: systemManager.data,
+
 
 });
 //4.2需要使用的http api接口 和 需要使用的方法
-const mapDispatch = ( {systemManager} ) => ({
+const mapDispatch = ({ systemManager }) => ({
 
 });
+const columns = [
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    // render: text => <a>{text}</a>,
+  },
+  {
+    title: '账号',
+    dataIndex: 'age',
+  },
+  {
+    title: '创建时间',
+    dataIndex: 'address',
+  }, {
+    title: '操作',
+    dataIndex: '',
+    key: 'x',
+    render: () => <a>Delete</a>,
+  },
+];
+const SystemManager = (props) => {
+const [state,setState] = useState({
+  visible:false,
+  loading:false
+});
 
-const SystemManager = (props)=> {
-    const columns = [
-        {
-          title: 'Name',
-          dataIndex: 'name',
-          render: text => <a>{text}</a>,
-        },
-        {
-          title: 'Age',
-          dataIndex: 'age',
-        },
-        {
-          title: 'Address',
-          dataIndex: 'address',
-        },
-      ];
-      const data = [
-        {
-          key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park',
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 1 Lake Park',
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          age: 32,
-          address: 'Sidney No. 1 Lake Park',
-        },
-        {
-          key: '4',
-          name: 'Disabled User',
-          age: 99,
-          address: 'Sidney No. 1 Lake Park',
-        },
-      ]; // rowSelection object indicates the need for row selection
-      
-      const rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-          console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: record => ({
-          disabled: record.name === 'Disabled User',
-          // Column configuration not to be checked
-          name: record.name,
-        }),
-      };
-      const [selectionType, setSelectionType] = useState('checkbox');
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    },
+    getCheckboxProps: record => ({
+      disabled: record.name === 'Disabled User',
+      // Column configuration not to be checked
+      name: record.name,
+    }),
+  };
 
-    return (
-      <div className="addUserPage">
-          <div>
-            <Radio.Group
-                onChange={({ target: { value } }) => {
-                setSelectionType(value);
-                }}
-                value={selectionType}
-            >
-                <Radio value="checkbox">Checkbox</Radio>
-                <Radio value="radio">radio</Radio>
-            </Radio.Group>
+  const addUser = (<div>add</div>);
+const handleOk = () => {
+  setState({ 
+    ...state,
+    loading: true 
+  });
+  setTimeout(() => {
+    setState({ 
+      ...state,
+      loading: false,
+      visible: false 
+    });
+  }, 1000);
+};
+const handleCancel = () => {
+  setState({
+    ...state,
+     visible: false 
+    });
+};
+const openlayer = ()=>{
+  setState({
+    ...state,
+     visible: true 
+    });
+}
 
-            <Divider />
+  return (
+    <div className="systemPage">
+      <div>
+        <div className="btn_wrap" onClick = {()=>openlayer()}>
+          <Button type="primary" block={true}>
+            <PlusOutlined />
+                  新增
+              </Button>
+          
+        </div>
+        <Modal
+            title="新增账号"
+            visible={state.visible}
+            closable={false}
+            // onOk={this.handleOk}
+            // onCancel={this.handleCancel}
+            footer={[
+              <Button key="submit" type="primary" loading={state.loading} onClick={() => handleOk()}>
+                保存
+                  </Button>,
+              <Button key="back" onClick={() => handleCancel ()}>
+                取消
+                  </Button>,
+            ]}
+          >
+            {addUser}
+          </Modal>
 
-            <Table
-                rowSelection={{
-                type: selectionType,
-                ...rowSelection,
-                }}
-                columns={columns}
-                dataSource={data}
-            />
-            </div>
-         
+
+        <Divider />
+
+        <Table
+          rowSelection={{
+            type: "checkbox",
+            ...rowSelection,
+          }}
+          columns={columns}
+          dataSource={props.data}
+          pagination={{ position: ['bottomRight'], pageSize: 2 }}
+        />
       </div>
-    );
-  }
+
+    </div>
+  );
+}
 
 
 

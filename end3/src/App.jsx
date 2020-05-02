@@ -14,7 +14,7 @@ import './App.scss';
 
 
 const App = () => {
-  const [isLogin,setIsLogin] = useState();
+  const [isLogin = sessionStorage.getItem("isLogin"),setIsLogin] = useState();
   const changeLoginStatus = (val)=>{
     console.log(val);
     setIsLogin(val);
@@ -64,7 +64,7 @@ const data = [{
 const menu = (
  
     <div className="layoutBtn_wrap">
-        <a href="/login">
+        <a href="#/login" onClick={()=>loginOut()}>
           退出登录
         </a>
     </div>
@@ -73,6 +73,10 @@ console.log(loadableComponent('views/Login', {
   model: 'store/login',
   loadingType: 'full'
 }));
+const loginOut = ()=>{
+  sessionStorage.setItem("isLogin",false);
+  setIsLogin(false);
+}
   return (
     <div className="root">
       <Provider store={store}>

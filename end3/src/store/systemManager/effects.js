@@ -1,4 +1,4 @@
-import {} from '../../services';
+import {getadmininfo} from '../../services';
 import Actions from '../../utils/index';
 
 //3.3添加接口实现

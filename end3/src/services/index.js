@@ -4,4 +4,4 @@ import axios from './axios';
 // export const userLogin= prams => axios.get('/admininfo/login', {params: prams});
 //初始化 
 export const userLogin = prams => axios.post('/admininfo/login', prams);
-
+export const getadmininfo = prams => axios.post('/admininfo/getadmininfo', prams);

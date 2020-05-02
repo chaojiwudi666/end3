@@ -5,8 +5,10 @@ html,body,#root,.root{
 }
 .mainLayout{
     display: flex;
+    height: 100%;
     .leftLayout{
         width: 20%;
+        height: 100%;
     }
     .rightLayout{
         width: 80%;
@@ -35,10 +37,23 @@ html,body,#root,.root{
     }
 }
 .layoutBtn_wrap{
-    width: 50px;
+    width: 80px;
     background-color: #fff;
-   
+    min-height: 40px;
     border-radius: 2px;
     outline: 0;
     box-shadow: 0 3px 6px -4px rgba(0,0,0,0.12), 0 6px 16px 0 rgba(0,0,0,0.08), 0 9px 28px 8px rgba(0,0,0,0.05);
+    padding: 5px;
+    a{
+        height: 30px;
+        color: #000;
+        width: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+    a:hover{
+        color: #1890ff;
+    }
 }
