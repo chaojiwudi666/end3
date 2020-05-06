@@ -51,7 +51,7 @@ const noLoading = () => {
  * @param {String} param2.loadingType loading类型，full(全屏)|page(单页)，默认full
  */
 const loadableComponent = (importComponent, { model, loadingType = 'page' } = {},data) => {
-  console.log(data);
+  console.log(importComponent);
   let change = data;
   let loading = null;
   switch (loadingType) {
@@ -75,6 +75,7 @@ const loadableComponent = (importComponent, { model, loadingType = 'page' } = {}
       models = [model];
     }
     models.forEach(async modelItem => {
+      console.log(modelItem);
       loaderModels[modelItem] = () => import(/* webpackChunkName: "[request]" */`../../src/${modelItem}`);
     });
   }

@@ -6,5 +6,6 @@ const immer = immerPlugin();
 const store = init({
   plugins: [immer]
 });
+console.log(store);
 
 export default store;

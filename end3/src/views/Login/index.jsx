@@ -43,7 +43,7 @@ const chooseType = (e)=>{
       ...values,
       // peopleType:state.peopleType
     }
-    // props.userToLogin(params);
+    props.userToLogin(params);
     sessionStorage.setItem("isLogin","isLogin");
     props.change(sessionStorage.getItem("isLogin"));
     props.history.push("/home");
