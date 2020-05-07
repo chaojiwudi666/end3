@@ -17,43 +17,55 @@ const mapDispatch = ( {electricManager} ) => ({
 const ElectricManager = (props)=> {
     const columns = [
         {
-          title: 'Name',
-          dataIndex: 'name',
-          render: text => <a>{text}</a>,
+          title: '宿舍编号',
+          dataIndex: 'dormitoryId',
+          align:"center"
+          
         },
         {
-          title: 'Age',
-          dataIndex: 'age',
+          title: '历史度数',
+          dataIndex: 'degreesHistory',
+          align:"center"
+
         },
         {
-          title: 'Address',
-          dataIndex: 'address',
+          title: '当前度数',
+          dataIndex: 'current',
+          align:"center"
+
+        },  {
+          title: '余额',
+          dataIndex: 'balance',
+          align:"center"
+
         },
       ];
       const data = [
         {
           key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park',
+          dormitoryId: 101,
+          degreesHistory: 100,
+          current: 101,
+          balance:1
         },
         {
           key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 1 Lake Park',
-        },
-        {
+          dormitoryId: 101,
+          degreesHistory: 100,
+          current: 101,
+          balance:1
+        }, {
           key: '3',
-          name: 'Joe Black',
-          age: 32,
-          address: 'Sidney No. 1 Lake Park',
-        },
-        {
+          dormitoryId: 101,
+          degreesHistory: 100,
+          current: 101,
+          balance:1
+        }, {
           key: '4',
-          name: 'Disabled User',
-          age: 99,
-          address: 'Sidney No. 1 Lake Park',
+          dormitoryId: 101,
+          degreesHistory: 100,
+          current: 101,
+          balance:1
         },
       ]; // rowSelection object indicates the need for row selection
       
@@ -72,15 +84,7 @@ const ElectricManager = (props)=> {
     return (
       <div className="addUserPage">
           <div>
-            <Radio.Group
-                onChange={({ target: { value } }) => {
-                setSelectionType(value);
-                }}
-                value={selectionType}
-            >
-                <Radio value="checkbox">Checkbox</Radio>
-                <Radio value="radio">radio</Radio>
-            </Radio.Group>
+            
 
             <Divider />
 

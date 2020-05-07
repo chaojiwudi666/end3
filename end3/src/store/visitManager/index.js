@@ -3,6 +3,10 @@ import effects from './effects';
 
 //3.2 定义store里面dispatch的字段
 export const state = {
+  listData:[],
+  pageNo:1,
+  pageSize:6,
+  total:0
   
    
 };

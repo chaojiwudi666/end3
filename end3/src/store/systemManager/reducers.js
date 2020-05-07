@@ -1,10 +1,10 @@
 import {GET_USERLIST,DELETE_DATA} from './action-types';
 export default {
     [GET_USERLIST](state,payload){     
-        // console.log(state);   
+        console.log(payload.total);   
       
-        // state.data = payload.data;
-        
+        state.listData = payload.listData;
+        state.total = payload.total;
         return state;
     },
     [DELETE_DATA](state,payload){

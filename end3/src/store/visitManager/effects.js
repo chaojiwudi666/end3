@@ -1,34 +1,36 @@
-import {} from '../../services';
+import {savevisitorinfo,getvisitorinfo} from '../../services';
 import Actions from '../../utils/index';
 
 //3.3添加接口实现
 const effects = dispatch => ({
-    // async TravelInitInfo(prams, state) {
+    async saveVisitorinfo(prams, state) {
        
-    //     let pram = {
-    //         appId: prams,
-    //     };
-    //     let res = await TravelInitInfo(pram);
-   
-    //     dispatch({
-    //         type: 'home/TRAVEL_INIT_INFO',
-    //         payload: {
-    //             initInfo: res.data.Data,
-    //         }
-    //     });
-    // },
-    // async GetTravelIndexPage(prams, state) {
+        // let pram = {
+        //     appId: prams,
+        // };
+        let res = await savevisitorinfo(prams);
+        console.log(res);
+        // dispatch({
+        //     type: 'home/TRAVEL_INIT_INFO',
+        //     payload: {
+        //         initInfo: res.data.Data,
+        //     }
+        // });
+    },
+    async getVisitorinfo(prams, state) {
        
+        let res = await getvisitorinfo(prams);  
+        let listData = Actions.formateListData(res.data.data);
         
-    //     let res = await GetTravelIndexPage(prams);
-   
-    //     dispatch({
-    //         type: 'home/TRAVEL_CONTENT_INFO',
-    //         payload: {
-    //             contentInfo: res.data.Data,
-    //         }
-    //     });
-    // },
+        console.log(listData);
+        dispatch({
+            type: 'visitManager/GET_LISTDATA',
+            payload: {
+                listData: listData,
+                pageNo:res.pageNo
+            }
+        });
+    },
     // async GetTravelFooter(prams, state) {
        
     //     let pram = {

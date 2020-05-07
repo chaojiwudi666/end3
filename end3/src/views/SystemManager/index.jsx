@@ -1,20 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Radio, Divider, Button, Modal, Form, Input } from 'antd';
+import { Table, Radio, Divider, Button, Modal, Form, Input ,Select } from 'antd';
 
 import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined } from '@ant-design/icons';
 import './index.scss';
+const { Option } = Select;
 //4.1对应映射的字段 
 const mapState = ({ systemManager }) => ({
   userInfo:systemManager.userInfo,
-  data: systemManager.data,
+  listData: systemManager.listData,
+  page_no:systemManager.page_no,
+  page_size:systemManager.page_size,
+  total:systemManager.total
 
 
 });
 //4.2需要使用的http api接口 和 需要使用的方法
 const mapDispatch = ({ systemManager }) => ({
   getadmininfo: systemManager.getadmininfo,
+  saveAdmininfo:systemManager.saveAdmininfo,
   deleteData: systemManager.deleteData
 });
 
@@ -23,23 +28,35 @@ const SystemManager = (props) => {
     visible: false,
     loading: false,
     modelTitle:"",
-    listData:props.data,
+    listData:props.listData,
   });
   const columns = [
     {
       title: '姓名',
       dataIndex: 'name',
+      align:"center"
       // render: text => <a>{text}</a>,
     },
     {
       title: '账号',
-      dataIndex: 'age',
+      dataIndex: 'phone',
+      align:"center"
+
+    },
+    {
+      title:'账号权限',
+      dataIndex: 'role_id',
+      align:"center"
     },
     {
       title: '创建时间',
-      dataIndex: 'address',
+      dataIndex: 'create_time',
+      align:"center"
+
     }, {
       title: '操作',
+      align:"center",
+
       dataIndex: '',
       key: 'x',
       render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息")}/><CloseSquareOutlined onClick={()=>handleDelete(record.key)}/></div>,
@@ -52,13 +69,29 @@ const SystemManager = (props) => {
   //     });
   // }
   useEffect(() => {
-    // props.getadmininfo();
-    setState({
-      ...state,
-      listData:props.data
-    });
-    console.log(props.data);
-  }, [props.data]);
+    let prams = {
+      page_size:props.page_size,
+      page_no:props.page_no
+    }
+    props.getadmininfo(prams);
+   
+  }, []);
+  // useEffect(() => {
+   
+  //   setState({
+  //     ...state,
+  //     listData:props.listData
+  //   });
+   
+  // }, [props.listData]);
+   useEffect(() => {
+   
+    // setState({
+    //   ...state,
+    //   listData:props.listData
+    // });
+   console.log(props.total);
+  }, [props.total]);
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -70,18 +103,27 @@ const SystemManager = (props) => {
     }),
   };
   const onFinish = values => {
+    let prams = values.user;
+    props.saveAdmininfo(prams,()=>{
+        setState({
+          ...state,
+          loading: true
+        });
+        setTimeout(() => {
+          setState({
+            ...state,
+            loading: false,
+            visible: false
+          });
+        }, 1000);
+        let prams = {
+          page_size:props.page_size,
+          page_no:props.page_no
+        }
+        props.getadmininfo(prams);
 
-    setState({
-      ...state,
-      loading: true
     });
-    setTimeout(() => {
-      setState({
-        ...state,
-        loading: false,
-        visible: false
-      });
-    }, 1000);
+    
     console.log(values);
   };
   const layout = {
@@ -101,7 +143,7 @@ const SystemManager = (props) => {
     <Form.Item
       name={['user', 'name']}
       initialvalue="dsh"
-      label="账户名称"
+      label="账号名称"
       rules={[
         {
           required: true,
@@ -132,7 +174,23 @@ const SystemManager = (props) => {
         required: true,
       },
     ]}>
-      <Input />
+    <Input.Password/>
+    </Form.Item>
+    <Form.Item name={['user', 'role_id']} label="账户权限"  
+    rules={[
+      {
+        required: true,
+      },
+    ]}
+      >
+    <Select defaultValue="0" style={{ width: 120 }} >
+      <Option value="0">请选择权限</Option>
+      <Option value="1">管理员</Option>
+      <Option value="2">宿管员</Option>
+      <Option value="4">
+        学生
+      </Option>
+    </Select>
     </Form.Item>
     <Form.Item name={['user', 'remark']} label="备注" 
      
@@ -171,7 +229,14 @@ const SystemManager = (props) => {
     console.log(nowData);
     props.deleteData(nowData);
   }
-
+  const changePage = (page,page_size)=>{
+   
+    let prams = {
+      page_size:page_size,
+      page_no:page
+    }
+    props.getadmininfo(prams);
+  }
   return (
     <div className="systemPage">
       <div>
@@ -203,8 +268,8 @@ const SystemManager = (props) => {
             ...rowSelection,
           }}
           columns={columns}
-          dataSource={state.listData}
-          pagination={{ position: ['bottomRight'], pageSize: 10 }}
+          dataSource={props.listData}
+          pagination={{ position: ['bottomRight'], pageSize: 10 ,total:props.total,onChange:changePage}}
         />
       </div>
 

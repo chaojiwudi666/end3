@@ -6,16 +6,16 @@ import { Table, Radio, Divider, Button, Modal, Form, Input } from 'antd';
 import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined } from '@ant-design/icons';
 import './index.scss';
 //4.1对应映射的字段 
-const mapState = ({ systemManager }) => ({
-  userInfo:systemManager.userInfo,
-  data: systemManager.data,
+const mapState = ({ repairManager }) => ({
+  // userInfo:systemManager.userInfo,
+  // data: systemManager.data,
 
 
 });
 //4.2需要使用的http api接口 和 需要使用的方法
-const mapDispatch = ({ systemManager }) => ({
-  getadmininfo: systemManager.getadmininfo,
-  deleteData: systemManager.deleteData
+const mapDispatch = ({ repairManager }) => ({
+  // getadmininfo: systemManager.getadmininfo,
+  // deleteData: systemManager.deleteData
 });
 
 const RepairManager = (props) => {
@@ -27,20 +27,27 @@ const RepairManager = (props) => {
   });
   const columns = [
     {
-      title: '姓名',
-      dataIndex: 'name',
+      title: '宿舍编号',
+      dataIndex: 'dormitoryId',
+      align:"center"
       // render: text => <a>{text}</a>,
     },
     {
-      title: '账号',
-      dataIndex: 'age',
+      title: '维护类型',
+      dataIndex: 'maintenanceType',
+      align:"center"
+
     },
     {
       title: '创建时间',
-      dataIndex: 'address',
+      dataIndex: 'createTime',
+      align:"center"
+
     }, {
       title: '操作',
       dataIndex: '',
+      align:"center",
+
       key: 'x',
       render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息")}/><CloseSquareOutlined onClick={()=>handleDelete(record.key)}/></div>,
     },
@@ -173,7 +180,7 @@ const RepairManager = (props) => {
   }
 
   return (
-    <div className="systemPage">
+    <div className="repairManager">
       <div>
         <div className="btn_wrap" onClick={() => openlayer("新增账号")}>
           <Button type="primary" block={true}>

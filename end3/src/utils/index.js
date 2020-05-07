@@ -105,6 +105,17 @@ const checkLogin = (props,callback) =>{
 const saveLogin = () =>{
     sessionStorage.setItem('isLogin',true);
 }
+const formateListData = (arr)=>{
+    let listData =[];
+    arr.forEach((item,index)=>{
+        let obj = {
+            key:index,
+            ...item
+        };
+        listData.push(obj);
+    });
+    return listData;
+}
 var Actions = {
     getNowTime:getNowTime,
     isEmptyObject:isEmptyObject,
@@ -118,5 +129,6 @@ var Actions = {
     MD5:MD5,
     checkLogin:checkLogin,
     saveLogin:saveLogin,
+    formateListData:formateListData
 };
 export default Actions;
