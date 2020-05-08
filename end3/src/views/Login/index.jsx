@@ -95,7 +95,7 @@ const chooseType = (e)=>{
                 >
                   <Input.Password placeholder="请输入密码"/>
                 </Form.Item>
-                <Form.Item 
+                {/* <Form.Item 
                   label=""
                   name="peopleType" 
                   >  
@@ -105,7 +105,7 @@ const chooseType = (e)=>{
                     <Radio value={3}>学生</Radio>
                     
                   </Radio.Group>
-                  </Form.Item>
+                  </Form.Item> */}
 
                 <Form.Item  style={{"marginTop":"60px"}}>
                   <Button type="primary" htmlType="submit">

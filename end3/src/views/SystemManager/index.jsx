@@ -6,6 +6,8 @@ import { Table, Radio, Divider, Button, Modal, Form, Input ,Select } from 'antd'
 import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined } from '@ant-design/icons';
 import './index.scss';
 const { Option } = Select;
+
+
 //4.1对应映射的字段 
 const mapState = ({ systemManager }) => ({
   userInfo:systemManager.userInfo,
@@ -20,10 +22,13 @@ const mapState = ({ systemManager }) => ({
 const mapDispatch = ({ systemManager }) => ({
   getadmininfo: systemManager.getadmininfo,
   saveAdmininfo:systemManager.saveAdmininfo,
-  deleteData: systemManager.deleteData
+  deleteData: systemManager.deleteData,
+  getAdmininfobyId:systemManager.getAdmininfobyId
 });
 
 const SystemManager = (props) => {
+  
+ 
   const [state, setState] = useState({
     visible: false,
     loading: false,
@@ -59,7 +64,7 @@ const SystemManager = (props) => {
 
       dataIndex: '',
       key: 'x',
-      render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息")}/><CloseSquareOutlined onClick={()=>handleDelete(record.key)}/></div>,
+      render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息",record.id)}/><CloseSquareOutlined onClick={()=>handleDelete(record.id)}/></div>,
     },
   ];
   // const editModelshow = (val)=>{
@@ -76,22 +81,30 @@ const SystemManager = (props) => {
     props.getadmininfo(prams);
    
   }, []);
-  // useEffect(() => {
+  const [form] = Form.useForm();
+  useEffect(() => {
    
-  //   setState({
-  //     ...state,
-  //     listData:props.listData
-  //   });
-   
-  // }, [props.listData]);
+    // setState({
+    //   ...state,
+    //   listData:props.listData
+    // });
+    console.log(props.userInfo.user);
+    if(state.visible){
+      form.setFieldsValue({user:{
+        ...props.userInfo.user,
+        "role_id":props.userInfo.user.role_id+''
+      }});
+    }
+    
+  }, [props.userInfo]);
    useEffect(() => {
    
     // setState({
     //   ...state,
     //   listData:props.listData
     // });
-   console.log(props.total);
-  }, [props.total]);
+   console.log(props.page_no);
+  }, [props.page_no]);
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -124,7 +137,7 @@ const SystemManager = (props) => {
 
     });
     
-    console.log(values);
+   
   };
   const layout = {
     labelCol: {
@@ -138,7 +151,7 @@ const SystemManager = (props) => {
     required: '${label}不能为空!',
   };
 
-  const addUser = (<Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages} initialValues = {props.userInfo}>
+  const addUser = (<Form {...layout} form={form}  name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
 
     <Form.Item
       name={['user', 'name']}
@@ -183,8 +196,7 @@ const SystemManager = (props) => {
       },
     ]}
       >
-    <Select defaultValue="0" style={{ width: 120 }} >
-      <Option value="0">请选择权限</Option>
+    <Select style={{ width: 120 }} >
       <Option value="1">管理员</Option>
       <Option value="2">宿管员</Option>
       <Option value="4">
@@ -213,21 +225,35 @@ const SystemManager = (props) => {
       visible: false
     });
   };
-  const openlayer = (val) => {
-    console.log(val);
+  const openlayer = (val,id) => {
+    if(id>=0){
+      props.getAdmininfobyId({id});
+    }
+  
     setState({
       ...state,
       modelTitle:val,
       visible: true
     });
   }
-  const handleDelete = (key)=>{
-    let nowData = state.listData.filter(item=>{
-      console.log(key);
-        return(item.key!==key);
+  const handleDelete = (id)=>{
+    // let nowData = state.listData.filter(item=>{
+    //   console.log(id);
+    //     return(item.id!==id);
+    // });
+    // console.log(nowData);
+    let arr=[];
+    arr.push(id);
+    props.deleteData({
+      ids:arr
+    },()=>{
+      let prams = {
+        page_size:props.page_size,
+        page_no:props.page_no
+      }
+      props.getadmininfo(prams);
+      
     });
-    console.log(nowData);
-    props.deleteData(nowData);
   }
   const changePage = (page,page_size)=>{
    
@@ -240,7 +266,7 @@ const SystemManager = (props) => {
   return (
     <div className="systemPage">
       <div>
-        <div className="btn_wrap" onClick={() => openlayer("新增账号")}>
+        <div className="btn_wrap" onClick={() => openlayer("新增账号",-1)}>
           <Button type="primary" block={true}>
             <PlusOutlined />
                   新增
@@ -248,6 +274,8 @@ const SystemManager = (props) => {
 
         </div>
         <Modal
+          forceRender
+          
           title={state.modelTitle}
           visible={state.visible}
           closable={false}
@@ -269,7 +297,7 @@ const SystemManager = (props) => {
           }}
           columns={columns}
           dataSource={props.listData}
-          pagination={{ position: ['bottomRight'], pageSize: 10 ,total:props.total,onChange:changePage}}
+          pagination={{ position: ['bottomRight'], pageSize: 10 ,total:props.total,onChange:changePage,current:props.page_no}}
         />
       </div>
 

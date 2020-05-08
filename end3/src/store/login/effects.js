@@ -16,7 +16,7 @@ const effects = dispatch => ({
         }
         let res = await userLogin(data);
         console.log(res);
-        if(res.data.state<0){
+        if(res.data.state>0){
             message.error(res.data.message.name);
         }else{
             callback();

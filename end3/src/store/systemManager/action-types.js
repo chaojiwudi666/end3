@@ -1,5 +1,6 @@
  export const GET_USERLIST = 'GET_USERLIST';
  export const DELETE_DATA = 'DELETE_DATA';
+ export const GET_USERINFO = 'GET_USERINFO';
 
 
 // export const GET_INFOLIST='GET_INFOLIST';

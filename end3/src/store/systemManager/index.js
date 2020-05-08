@@ -9,6 +9,7 @@ export const state = {
       password:"",
       name:"",
       remark:"",
+      role_id:0
     }
     
   },

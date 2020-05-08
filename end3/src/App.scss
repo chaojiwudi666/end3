@@ -1,10 +1,6 @@
 // @import '~antd/dist/antd.css';
 :root,body,#root,.root{
-    position: absolute;
-    right: 0;
-    left: 0;
-    top: 0;
-    bottom: 0;
+    height: 100%;
 
 
 }
@@ -17,9 +13,13 @@
     }
     .rightLayout{
         width: 80%;
+        overflow: auto;
+        position: relative;
         .head-nav{
+          
             height: 50px;        
             border-bottom: 1px solid #000;
+        
 
             .userName{
                 position: absolute;
