@@ -15,11 +15,14 @@ import './App.scss';
 
 const App = () => {
   const [isLogin = sessionStorage.getItem("isLogin"),setIsLogin] = useState();
+  const [userName,setUserName] = useState();
   const changeLoginStatus = (val)=>{
     console.log(val);
     setIsLogin(val);
   }
-  
+  useEffect(()=>{
+    setUserName(JSON.parse(sessionStorage.getItem("userInfo")).name);
+  },[sessionStorage.getItem("userInfo")]);  
 const data = [{
   path:"/home",
   icon:<BarsOutlined />,
@@ -107,7 +110,7 @@ const loginOut = ()=>{
                       <TeamOutlined />
                       <Dropdown overlay={menu} className="dropdown">
                         <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                          dsh <DownOutlined />
+                          {userName} <DownOutlined />
                         </a>
                       </Dropdown>
                     </div>

@@ -1,4 +1,4 @@
-import {getadmininfo,saveadmininfo,getadmininfobyid,deleteadmininfobyids} from '../../services';
+import {getadmininfo,saveadmininfo,getadmininfobyid,deleteadmininfobyids,updateadmininfobyid} from '../../services';
 import Actions from '../../utils/index';
 import { message} from 'antd';
 message.config({
@@ -101,6 +101,17 @@ const effects = dispatch => ({
             });
         }
        
+    },
+    async updateAdmininfobyid(prams, state ,callback) {
+       
+      
+        let res = await updateadmininfobyid(prams);
+        if(res.data.state<0){
+            message.error(res.data.message.name);
+        }else{
+            callback&&callback();
+            
+        }
     }
 
 });

@@ -23,17 +23,19 @@ const mapDispatch = ({ systemManager }) => ({
   getadmininfo: systemManager.getadmininfo,
   saveAdmininfo:systemManager.saveAdmininfo,
   deleteData: systemManager.deleteData,
-  getAdmininfobyId:systemManager.getAdmininfobyId
+  getAdmininfobyId:systemManager.getAdmininfobyId,
+  updateAdmininfobyid:systemManager.updateAdmininfobyid
 });
 
 const SystemManager = (props) => {
   
  
   const [state, setState] = useState({
+    id:0,
     visible: false,
     loading: false,
     modelTitle:"",
-    listData:props.listData,
+    listData:[],
   });
   const columns = [
     {
@@ -67,16 +69,12 @@ const SystemManager = (props) => {
       render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息",record.id)}/><CloseSquareOutlined onClick={()=>handleDelete(record.id)}/></div>,
     },
   ];
-  // const editModelshow = (val)=>{
-  //     setState({
-  //       ...state,
-  //       visible:true
-  //     });
-  // }
+ 
   useEffect(() => {
+    console.log("update");
     let prams = {
       page_size:props.page_size,
-      page_no:props.page_no
+      page_no:1
     }
     props.getadmininfo(prams);
    
@@ -117,7 +115,11 @@ const SystemManager = (props) => {
   };
   const onFinish = values => {
     let prams = values.user;
-    props.saveAdmininfo(prams,()=>{
+
+    if(state.modelTitle==="修改信息"){
+      console.log(prams);
+      prams={...prams,id:state.id};
+      props.updateAdmininfobyid(prams,()=>{
         setState({
           ...state,
           loading: true
@@ -136,6 +138,29 @@ const SystemManager = (props) => {
         props.getadmininfo(prams);
 
     });
+    }else{
+      props.saveAdmininfo(prams,()=>{
+        setState({
+          ...state,
+          loading: true
+        });
+        setTimeout(() => {
+          setState({
+            ...state,
+            loading: false,
+            visible: false
+          });
+        }, 1000);
+        let prams = {
+          page_size:props.page_size,
+          page_no:props.page_no
+        }
+        props.getadmininfo(prams);
+
+    });
+
+    }
+    
     
    
   };
@@ -233,6 +258,7 @@ const SystemManager = (props) => {
     setState({
       ...state,
       modelTitle:val,
+      id:id,
       visible: true
     });
   }
