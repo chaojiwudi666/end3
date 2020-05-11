@@ -19,8 +19,8 @@ const effects = dispatch => ({
         if(res.data.state<0){
             message.error(res.data.message.name);
         }else{
-            callback();
-            sessionStorage.setItem("userInfo",JSON.stringify(res.data));
+            callback(res.data.data);
+           
         }
         
     },

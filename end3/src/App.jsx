@@ -15,14 +15,13 @@ import './App.scss';
 
 const App = () => {
   const [isLogin = sessionStorage.getItem("isLogin"),setIsLogin] = useState();
-  const [userName,setUserName] = useState();
-  const changeLoginStatus = (val)=>{
-    console.log(val);
+  const [userName=sessionStorage.getItem("userInfo")?JSON.parse(sessionStorage.getItem("userInfo")).name:"",setUserName] = useState();
+  const changeLoginStatus = (val,data)=>{
+    console.log(data);
     setIsLogin(val);
+    setUserName(data.name);
   }
-  useEffect(()=>{
-    setUserName(JSON.parse(sessionStorage.getItem("userInfo")).name);
-  },[sessionStorage.getItem("userInfo")]);  
+
 const data = [{
   path:"/home",
   icon:<BarsOutlined />,
