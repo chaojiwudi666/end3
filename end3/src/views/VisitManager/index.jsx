@@ -9,8 +9,8 @@ import './index.scss';
 //4.1对应映射的字段 
 const mapState = ({visitManager}) => ({
   listData:visitManager.listData,
-  pageNo:visitManager.pageNo,
-  pageSize:visitManager.pageSize,
+  page_no:visitManager.page_no,
+  page_size:visitManager.page_size,
   total:visitManager.total
 
 
@@ -24,11 +24,14 @@ const mapDispatch = ( {visitManager} ) => ({
 const VisitManager = (props)=> {
   useEffect(()=>{
     let prams = {
-      pageNo:1,
-      pageSize:10
+      page_no:1,
+      page_size:props.page_size
     }
     props.getVisitorinfo(prams);
   },[]);
+  useEffect(()=>{
+    console.log(props.page_no);
+  },[props.page_no]);
   const [state, setState] = useState({
     visible: false,
     loading: false,
@@ -116,27 +119,36 @@ const VisitManager = (props)=> {
         }),
       };
       const onFinish = values => {
-        console.log(moment(values.user.createTime).format('YYYY-MM-DD HH:mm:ss') );
-        props.saveVisitorinfo({
-          name:"dsh",
-          phone:13505727728,
-          student_name:"dsh",
-          student_id:1,
-          create_user:"dsh"
-
-        });
-
-        setState({
-          ...state,
-          loading: true
-        });
-        setTimeout(() => {
+        console.log(moment(values.visitor.createTime).format('YYYY-MM-DD HH:mm:ss') );
+        let parmas = {
+          phone:values.visitor.phone,
+          student_name:values.visitor.student_name,
+          name:values.visitor.name,
+          remark:values.visitor.remark,
+          visit_time:moment(values.visitor.createTime).format('YYYY-MM-DD HH:mm:ss')
+        }
+        props.saveVisitorinfo(parmas,()=>{
           setState({
             ...state,
-            loading: false,
-            visible: false
+            loading: true
           });
-        }, 1000);
+          setTimeout(() => {
+            setState({
+              ...state,
+              loading: false,
+              visible: false
+            });
+          }, 1000);
+          let prams = {
+            page_size:props.page_size,
+            page_no:props.page_no
+          }
+          props.getVisitorinfo(prams);
+
+
+        });
+
+        
       };
       const layout = {
         labelCol: {
@@ -149,17 +161,17 @@ const VisitManager = (props)=> {
       const validateMessages = {
         required: '${label}不能为空!',
       };
-    const changePage = (page)=>{
+    const changePage = (page,page_size)=>{
       let prams = {
-        pageNo:page,
-        pageSize:10
+        page_no:page,
+        page_size:page_size
       }
       props.getVisitorinfo(prams);
     }
       const addUser = (<Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages} initialValues = {props.userInfo}>
 
       <Form.Item
-        name={['user', 'name']}
+        name={['visitor', 'name']}
         label="访客姓名"
         rules={[
           {
@@ -170,7 +182,7 @@ const VisitManager = (props)=> {
         <Input />
       </Form.Item>
       <Form.Item
-        name={['user', 'phone']}
+        name={['visitor', 'phone']}
      
         label="访客联系方式"
         rules={[
@@ -183,7 +195,7 @@ const VisitManager = (props)=> {
       </Form.Item>
      
       <Form.Item 
-      name={['user', 'student_name']}
+      name={['visitor', 'student_name']}
      
   
       label="学生姓名"
@@ -195,7 +207,7 @@ const VisitManager = (props)=> {
         <Input />
       </Form.Item>
       <Form.Item 
-      name={['user', 'create_time']}
+      name={['visitor', 'visit_time']}
      
   
       label="来访时间"
@@ -206,7 +218,7 @@ const VisitManager = (props)=> {
       ]}>
         <DatePicker showTime placeholder="请选择时间" format="YYYY-MM-DD HH:mm:ss"/>
       </Form.Item>
-      <Form.Item name={['user', 'remark']} label="备注" 
+      <Form.Item name={['visitor', 'remark']} label="备注" 
        
         >
       <Input.TextArea />
@@ -273,8 +285,8 @@ const VisitManager = (props)=> {
                 ...rowSelection,
                 }}
                 columns={columns}
-                dataSource={state.listData}
-                pagination={{ position: ['bottomRight'], pageSize: 10 ,total:state.total,onChange:changePage}}
+                dataSource={props.listData}
+                pagination={{ position: ['bottomRight'], pageSize: 10 ,total:props.total,onChange:changePage,current:props.page_no}}
             />
             </div>
          

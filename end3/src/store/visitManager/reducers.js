@@ -1,9 +1,11 @@
 import {GET_LISTDATA} from './action-types';
 
 export default {
-    [GET_LISTDATA](state,payload){        
-        state.listData=payload.listData;           
-        state.pageNo=payload.pageNo;
+    [GET_LISTDATA](state,payload){   
+        console.log(payload.listData);     
+        state.listData = payload.listData;
+        state.total = payload.total;
+        state.page_no = payload.page_no;
    
         return state;
     }

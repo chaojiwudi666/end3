@@ -55,6 +55,13 @@ const myRoute = [
   exact: true,
   component: 'views/RepairManager',
   model: 'store/repairManager',
+},{
+  key: '/studentManager',
+  name: 'studentManager',
+  path: '/studentManager',
+  exact: true,
+  component: 'views/StudentManager',
+  model: 'store/studentManager',
 }
 ]
 export default myRoute;

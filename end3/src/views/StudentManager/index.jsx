@@ -9,25 +9,25 @@ const { Option } = Select;
 
 
 //4.1对应映射的字段 
-const mapState = ({ electricManager }) => ({
-  userInfo:electricManager.userInfo,
-  listData: electricManager.listData,
-  page_no:electricManager.page_no,
-  page_size:electricManager.page_size,
-  total:electricManager.total
+const mapState = ({ studentManager }) => ({
+  userInfo:studentManager.userInfo,
+  listData: studentManager.listData,
+  page_no:studentManager.page_no,
+  page_size:studentManager.page_size,
+  total:studentManager.total
 
 
 });
 //4.2需要使用的http api接口 和 需要使用的方法
-const mapDispatch = ({ electricManager }) => ({
-  getStudentinfo: electricManager.getStudentinfo,
-  saveStudentinfo:electricManager.saveStudentinfo,
-  deleteData: electricManager.deleteData,
-  getStudentinfobyId:electricManager.getStudentinfobyId,
-  updateStudentinfobyid:electricManager.updateStudentinfobyid
+const mapDispatch = ({ studentManager }) => ({
+  getStudentinfo: studentManager.getStudentinfo,
+  saveStudentinfo:studentManager.saveStudentinfo,
+  deleteData: studentManager.deleteData,
+  getStudentinfobyId:studentManager.getStudentinfobyId,
+  updateStudentinfobyid:studentManager.updateStudentinfobyid
 });
 
-const ElectricManager = (props) => {
+const StudentManager = (props) => {
   
  
   const [state, setState] = useState({
@@ -362,4 +362,4 @@ const ElectricManager = (props) => {
 
 export default connect(
   mapState, mapDispatch
-)(withRouter(ElectricManager));
+)(withRouter(StudentManager));

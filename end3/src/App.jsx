@@ -62,6 +62,11 @@ const data = [{
   icon:<ToolOutlined />,
   title:"报修管理",
   key:"repairManager"
+},{
+  path:"/studentManager",
+  icon:<ToolOutlined />,
+  title:"学生信息管理",
+  key:"studentManager"
 }]
 const menu = (
  
