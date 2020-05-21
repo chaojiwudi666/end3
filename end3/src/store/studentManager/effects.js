@@ -89,7 +89,7 @@ const effects = dispatch => ({
                          
                         
                         
-                            dormitory_id:res.data.data[0].dormitory_id,
+                            dormitory_number:res.data.data[0].dormitory_number,
                             class_id:res.data.data[0].class_id,
                             name: res.data.data[0].name,                                            
                             remark: res.data.data[0].remark,       

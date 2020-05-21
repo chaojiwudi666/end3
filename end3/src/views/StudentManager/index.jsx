@@ -65,7 +65,7 @@ const StudentManager = (props) => {
     },
     {
       title: '寝室编号',
-      dataIndex: 'dormitory_id',
+      dataIndex: 'dormitory_number',
       align:"center"
 
     },
@@ -218,7 +218,7 @@ const StudentManager = (props) => {
     </Form.Item>
     
     <Form.Item 
-    name={['user', 'dormitory_id']}
+    name={['user', 'dormitory_number']}
    
 
     label="寝室编号"

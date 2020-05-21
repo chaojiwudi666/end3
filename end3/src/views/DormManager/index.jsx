@@ -1,66 +1,106 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Radio, Divider, Button, Modal, Form, Input } from 'antd';
+import { Table, Radio, Divider, Button, Modal, Form, Input ,Select } from 'antd';
 
 import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined } from '@ant-design/icons';
 import './index.scss';
+const { Option } = Select;
+
+
 //4.1对应映射的字段 
 const mapState = ({ dormManager }) => ({
- 
-  listData:dormManager.listData
+  userInfo:dormManager.userInfo,
+  listData: dormManager.listData,
+  page_no:dormManager.page_no,
+  page_size:dormManager.page_size,
+  total:dormManager.total
+
 
 });
 //4.2需要使用的http api接口 和 需要使用的方法
 const mapDispatch = ({ dormManager }) => ({
- 
+  getdormitoryinfo: dormManager.getdormitoryinfo,
+  savedormitoryinfo:dormManager.savedormitoryinfo,
+  deleteData: dormManager.deleteData,
+  getdormitoryinfobyId:dormManager.getdormitoryinfobyId,
+  updatedormitoryinfobyid:dormManager.updatedormitoryinfobyid
 });
 
 const DormManager = (props) => {
+  
+ 
   const [state, setState] = useState({
+    id:0,
     visible: false,
     loading: false,
     modelTitle:"",
-    listData:props.listData,
+    listData:[],
   });
   const columns = [
     {
-      title: '寝室编号',
-      align:'center',
-      dataIndex: 'dormitoryNumber',
+
+      title: '宿舍编号',
+      dataIndex: 'hostel_id',
+      align:"center"
       // render: text => <a>{text}</a>,
     },
     {
-      title: '寝室楼编号',
-      align:'center',
-      dataIndex: 'hostelId',
+
+      title: '楼层',
+      dataIndex: 'floor_id',
+      align:"center"
+      // render: text => <a>{text}</a>,
     },
     {
-      title: '寝室长',
-      align:'center',
-      dataIndex: 'leader',
-    }, {
+      title: '楼号',
+      dataIndex: 'layer_id',
+      align:"center"
+      // render: text => <a>{text}</a>,
+    },
+     {
       title: '操作',
-      align:'center',
+      align:"center",
+
       dataIndex: '',
       key: 'x',
-      render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息")}/><CloseSquareOutlined onClick={()=>handleDelete(record.key)}/></div>,
+      render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息",record.id)}/><CloseSquareOutlined onClick={()=>handleDelete(record.id)}/></div>,
     },
   ];
-  // const editModelshow = (val)=>{
-  //     setState({
-  //       ...state,
-  //       visible:true
-  //     });
-  // }
+ 
   useEffect(() => {
-    // props.getadmininfo();
-    setState({
-      ...state,
-      listData:props.listData
-    });
-    console.log(props.listData);
-  }, [props.listData]);
+    console.log("update");
+    let prams = {
+      page_size:props.page_size,
+      page_no:1
+    }
+    props.getdormitoryinfo(prams);
+   
+  }, []);
+  const [form] = Form.useForm();
+  useEffect(() => {
+   
+    // setState({
+    //   ...state,
+    //   listData:props.listData
+    // });
+    console.log(props.userInfo.user);
+    if(state.visible){
+      form.setFieldsValue({user:{
+        ...props.userInfo.user,
+        
+      }});
+    }
+    
+  }, [props.userInfo]);
+   useEffect(() => {
+   
+    // setState({
+    //   ...state,
+    //   listData:props.listData
+    // });
+   console.log(props.page_no);
+  }, [props.page_no]);
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -72,19 +112,55 @@ const DormManager = (props) => {
     }),
   };
   const onFinish = values => {
+    let prams = values.user;
 
-    setState({
-      ...state,
-      loading: true
+    if(state.modelTitle==="修改信息"){
+      console.log(prams);
+      prams={...prams,id:state.id};
+      props.updatedormitoryinfobyid(prams,()=>{
+        setState({
+          ...state,
+          loading: true
+        });
+        setTimeout(() => {
+          setState({
+            ...state,
+            loading: false,
+            visible: false
+          });
+        }, 1000);
+        let prams = {
+          page_size:props.page_size,
+          page_no:props.page_no
+        }
+        props.getdormitoryinfo(prams);
+
     });
-    setTimeout(() => {
-      setState({
-        ...state,
-        loading: false,
-        visible: false
-      });
-    }, 1000);
-    console.log(values);
+    }else{
+      props.savedormitoryinfo(prams,()=>{
+        setState({
+          ...state,
+          loading: true
+        });
+        setTimeout(() => {
+          setState({
+            ...state,
+            loading: false,
+            visible: false
+          });
+        }, 1000);
+        let prams = {
+          page_size:props.page_size,
+          page_no:props.page_no
+        }
+        props.getdormitoryinfo(prams);
+
+    });
+
+    }
+    
+    
+   
   };
   const layout = {
     labelCol: {
@@ -98,11 +174,12 @@ const DormManager = (props) => {
     required: '${label}不能为空!',
   };
 
-  const eidtModel = (<Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages} initialValues = {props.userInfo}>
+  const addUser = (<Form {...layout} form={form}  name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
 
     <Form.Item
-      name={['user', 'leader']}
-      label="寝室长"
+      name={['user', 'hostel_id']}
+      
+      label="寝室编号"
       rules={[
         {
           required: true,
@@ -112,9 +189,9 @@ const DormManager = (props) => {
       <Input />
     </Form.Item>
     <Form.Item
-      name={['user', 'docNumber']}
+      name={['user', 'floor_id']}
    
-      label="寝室成员"
+      label="寝室楼层"
       rules={[
         {
           required: true,
@@ -123,18 +200,20 @@ const DormManager = (props) => {
     >
       <Input />
     </Form.Item>
+    
     <Form.Item 
-    name={['user', 'password']}
+    name={['user', 'layer_id']}
    
 
-    label="密码"
+    label="寝室楼号"
     rules={[
       {
         required: true,
       },
     ]}>
-      <Input />
+    <Input/>
     </Form.Item>
+    
     <Form.Item name={['user', 'remark']} label="备注" 
      
       >
@@ -156,27 +235,49 @@ const DormManager = (props) => {
       visible: false
     });
   };
-  const openlayer = (val) => {
-    console.log(val);
+  const openlayer = (val,id) => {
+    if(id>=0){
+      props.getdormitoryinfobyId({id});
+    }
+  
     setState({
       ...state,
       modelTitle:val,
+      id:id,
       visible: true
     });
   }
-  const handleDelete = (key)=>{
-    let nowData = state.listData.filter(item=>{
-      console.log(key);
-        return(item.key!==key);
+  const handleDelete = (id)=>{
+    // let nowData = state.listData.filter(item=>{
+    //   console.log(id);
+    //     return(item.id!==id);
+    // });
+    // console.log(nowData);
+    let arr=[];
+    arr.push(id);
+    props.deleteData({
+      ids:arr
+    },()=>{
+      let prams = {
+        page_size:props.page_size,
+        page_no:props.page_no
+      }
+      props.getdormitoryinfo(prams);
+      
     });
-    console.log(nowData);
-    props.deleteData(nowData);
   }
-
+  const changePage = (page,page_size)=>{
+   
+    let prams = {
+      page_size:page_size,
+      page_no:page
+    }
+    props.getdormitoryinfo(prams);
+  }
   return (
-    <div className="dormManager">
+    <div className="dormPage">
       <div>
-        <div className="btn_wrap" onClick={() => openlayer("新增账号")}>
+        <div className="btn_wrap" onClick={() => openlayer("新增账号",-1)}>
           <Button type="primary" block={true}>
             <PlusOutlined />
                   新增
@@ -184,6 +285,8 @@ const DormManager = (props) => {
 
         </div>
         <Modal
+          forceRender
+          
           title={state.modelTitle}
           visible={state.visible}
           closable={false}
@@ -192,7 +295,7 @@ const DormManager = (props) => {
           // onCancel={this.handleCancel}
           footer={null}
         >
-          {eidtModel}
+          {addUser}
         </Modal>
 
 
@@ -204,8 +307,8 @@ const DormManager = (props) => {
             ...rowSelection,
           }}
           columns={columns}
-          dataSource={state.listData}
-          pagination={{ position: ['bottomRight'], pageSize: 10 }}
+          dataSource={props.listData}
+          pagination={{ position: ['bottomRight'], pageSize: 10 ,total:props.total,onChange:changePage,current:props.page_no}}
         />
       </div>
 

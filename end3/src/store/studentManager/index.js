@@ -10,7 +10,7 @@ export const state = {
      
       name:"",
       remark:"",
-      dormitory_id:0,
+      dormitory_number:0,
       class_id:""
     }
     

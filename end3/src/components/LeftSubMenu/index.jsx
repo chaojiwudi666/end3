@@ -5,34 +5,34 @@ import { ToolOutlined,SolutionOutlined,UserAddOutlined, ThunderboltOutlined,Sett
 import "./index.scss";
 const { SubMenu } = Menu;
 
-// const imgObj = [{
-//   key:"sub1",
-//   img: <AppstoreOutlined/>
-// },{
-//   key:"sub2",
-//   img: <AppstoreOutlined/>
-// },{
-//   key:"sub3",
-//   img: <AppstoreOutlined/>
-// },{
-//   key:"sub4",
-//   img: <AppstoreOutlined/>
-// },{
-//   key:"sub5",
-//   img: <AppstoreOutlined/>
-// },{
-//   key:"sub6",
-//   img: <AppstoreOutlined/>
-// },{
-//   key:"sub7",
-//   img: <AppstoreOutlined/>
-// },{
-//   key:"sub8",
-//   img: <AppstoreOutlined/>
-// }];
+const imgObj = [{
+  key:"BarsOutlined",
+  img: <BarsOutlined/>
+},{
+  key:"SettingOutlined",
+  img: <SettingOutlined/>
+},{
+  key:"ThunderboltOutlined",
+  img: <ThunderboltOutlined/>
+},{
+  key:"UserAddOutlined",
+  img: <UserAddOutlined/>
+},{
+  key:"ShopOutlined",
+  img: <ShopOutlined/>
+},{
+  key:"SafetyOutlined",
+  img: <SafetyOutlined/>
+},{
+  key:"SolutionOutlined",
+  img: <SolutionOutlined/>
+},{
+  key:"ToolOutlined",
+  img: <ToolOutlined/>
+}];
 
 const LeftSubMenu = (props)=> {
-  console.log(props.location.pathname.split("/")[1]);
+
   let current = props.location.pathname.split("/")[1];
 
   const [state,setState] = useState({
@@ -72,7 +72,7 @@ const LeftSubMenu = (props)=> {
     });
   },[props.location.pathname]);
 const handleClick = (e)=>{
-  console.log(props);
+
   setState({
     ...state,
     current: e.key,
@@ -103,10 +103,23 @@ const handleClick = (e)=>{
                 key={item.key}
                 
               >
-                <span>
-                    {item.icon}
-                <span>{item.title}</span>
-                  </span>
+               
+                  {
+                    imgObj.map((val,i)=>{
+                      if(val.key===item.icon){
+                        return(
+                          <span>
+                            {val.img}
+                          <span>{item.title}</span>
+                          </span>
+                        )
+                      }
+                      
+                    })
+
+
+                  }
+                    
                 {/* <Menu.Item key="1">Option 1</Menu.Item>
                 <Menu.Item key="2">Option 2</Menu.Item>
                 <Menu.Item key="3">Option 3</Menu.Item>

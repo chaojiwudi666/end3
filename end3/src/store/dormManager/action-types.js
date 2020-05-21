@@ -1,4 +1,8 @@
- export const GET_LIST = 'GET_LIST';
+export const GET_LISTDATA = 'GET_LISTDATA';
+export const DELETE_DATA = 'DELETE_DATA';
+export const GET_USERINFO = 'GET_USERINFO';
+
+
 // export const GET_INFOLIST='GET_INFOLIST';
 // export const REST_PAGECOUNT='REST_PAGECOUNT';
 // export const UPDATE_LOADING='UPDATE_LOADING';

@@ -24,5 +24,19 @@ export const getstudentinfobyid = prams => axios.post('/api/studentinfo/getstude
 export const updatestudentinfobyid = prams => axios.post('/api/studentinfo/updatestudentinfobyid', prams);
 export const deletestudentinfobyids = prams => axios.post('/api/studentinfo/deletestudentinfobyids', prams);
 
+//宿舍管理
+export const savedormitoryinfo = prams => axios.post('/api/dormitoryinfo/savedormitoryinfo', prams);
+export const getdormitoryinfo = prams => axios.post('/api/dormitoryinfo/getdormitoryinfo', prams);
+export const getdormitoryinfobyid = prams => axios.post('/api/dormitoryinfo/getdormitoryinfobyid', prams);
+export const updatedormitoryinfobyid = prams => axios.post('/api/dormitoryinfo/updatedormitoryinfobyid', prams);
+export const deletedormitoryinfobyids = prams => axios.post('/api/dormitoryinfo/deletedormitoryinfobyids', prams);
+
+//电费管理
+export const saveelectricityinfo = prams => axios.post('/api/electricityinfo/saveelectricityinfo', prams);
+export const getelectricityinfo = prams => axios.post('/api/electricityinfo/getelectricityinfo', prams);
+export const getelectricityinfobyid = prams => axios.post('/api/electricityinfo/getelectricityinfobyid', prams);
+export const updateelectricityinfobyid = prams => axios.post('/api/electricityinfo/updateelectricityinfobyid', prams);
+export const deleteelectricityinfobyids = prams => axios.post('/api/electricityinfo/deleteelectricityinfobyids', prams);
+
 
 

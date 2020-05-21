@@ -16,58 +16,124 @@ import './App.scss';
 const App = () => {
   const [isLogin = sessionStorage.getItem("isLogin"),setIsLogin] = useState();
   const [userName=sessionStorage.getItem("userInfo")?JSON.parse(sessionStorage.getItem("userInfo")).name:"",setUserName] = useState();
+  const [data=sessionStorage.getItem("data")?JSON.parse(sessionStorage.getItem("data")):[],setData] = useState();
   const changeLoginStatus = (val,data)=>{
     console.log(data);
     setIsLogin(val);
     setUserName(data.name);
+    let menuData = [];
+    switch(data.role_id){
+      case 1:menuData = [{
+        path:"/home",
+        icon:"BarsOutlined",
+        title:"首页",
+        key:"home"
+      },{
+        path:"/systemManager",
+        icon:"SettingOutlined",
+        title:"系统管理",
+        key:"systemManager"
+      },{
+        path:"/electricManager",
+        icon:"ThunderboltOutlined",
+        title:"电费管理",
+        key:"electricManager"
+      },{
+        path:"/userInfoManager",
+        icon:"UserAddOutlined",
+        title:"个人信息管理",
+        key:"userInfoManager"
+      },{
+        path:"/dormManager",
+        icon:"ShopOutlined",
+        title:"寝室信息管理",
+        key:"dormManager"
+      },{
+        path:"/hygieneManager",
+        icon:"SafetyOutlined",
+        title:"卫生管理",
+        key:"hygieneManager"
+      },{
+        path:"/visitManager",
+        icon:"SolutionOutlined",
+        title:"来访人员管理",
+        key:"visitManager"
+      },{
+        path:"/repairManager",
+        icon:"ToolOutlined",
+        title:"报修管理",
+        key:"repairManager"
+      },{
+        path:"/studentManager",
+        icon:"ToolOutlined",
+        title:"学生信息管理",
+        key:"studentManager"
+      }]
+      break;
+      case 2: menuData = [{
+        path:"/home",
+        icon:"BarsOutlined",
+        title:"首页",
+        key:"home"
+      },{
+        path:"/electricManager",
+        icon:"ThunderboltOutlined",
+        title:"电费管理",
+        key:"electricManager"
+      },{
+        path:"/userInfoManager",
+        icon:"UserAddOutlined",
+        title:"个人信息管理",
+        key:"userInfoManager"
+      },{
+        path:"/dormManager",
+        icon:"ShopOutlined",
+        title:"寝室信息管理",
+        key:"dormManager"
+      },{
+        path:"/hygieneManager",
+        icon:"SafetyOutlined",
+        title:"卫生管理",
+        key:"hygieneManager"
+      },{
+        path:"/visitManager",
+        icon:"SolutionOutlined",
+        title:"来访人员管理",
+        key:"visitManager"
+      },{
+        path:"/repairManager",
+        icon:"ToolOutlined",
+        title:"报修管理",
+        key:"repairManager"
+      },{
+        path:"/studentManager",
+        icon:"ToolOutlined",
+        title:"学生信息管理",
+        key:"studentManager"
+      }]
+      break;
+      case 4:menuData = [{
+        path:"/home",
+        icon:"BarsOutlined",
+        title:"首页",
+        key:"home"
+      },{
+        path:"/userInfoManager",
+        icon:"UserAddOutlined",
+        title:"个人信息管理",
+        key:"userInfoManager"
+      }]
+      break;
+    }
+    setData(menuData);
+    sessionStorage.setItem("data",JSON.stringify(menuData));
+    
   }
+  useEffect(()=>{
+    
+  },[]);
 
-const data = [{
-  path:"/home",
-  icon:<BarsOutlined />,
-  title:"首页",
-  key:"home"
-},{
-  path:"/systemManager",
-  icon:<SettingOutlined />,
-  title:"系统管理",
-  key:"systemManager"
-},{
-  path:"/electricManager",
-  icon:<ThunderboltOutlined />,
-  title:"电费管理",
-  key:"electricManager"
-},{
-  path:"/userInfoManager",
-  icon:<UserAddOutlined />,
-  title:"个人信息管理",
-  key:"userInfoManager"
-},{
-  path:"/dormManager",
-  icon:<ShopOutlined />,
-  title:"寝室信息管理",
-  key:"dormManager"
-},{
-  path:"/hygieneManager",
-  icon:<SafetyOutlined />,
-  title:"卫生管理",
-  key:"hygieneManager"
-},{
-  path:"/visitManager",
-  icon:<SolutionOutlined />,
-  title:"来访人员管理",
-  key:"visitManager"
-},{
-  path:"/repairManager",
-  icon:<ToolOutlined />,
-  title:"报修管理",
-  key:"repairManager"
-},{
-  path:"/studentManager",
-  icon:<ToolOutlined />,
-  title:"学生信息管理",
-  key:"studentManager"
-}]
+
 const menu = (
  
     <div className="layoutBtn_wrap">

@@ -24,7 +24,7 @@ export const state = {
 };
 
 export default {
-  name: 'studentManager',
+  name: 'electricManager',
   state,
   reducers,
   effects

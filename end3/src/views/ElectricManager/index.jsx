@@ -20,11 +20,11 @@ const mapState = ({ electricManager }) => ({
 });
 //4.2需要使用的http api接口 和 需要使用的方法
 const mapDispatch = ({ electricManager }) => ({
-  getStudentinfo: electricManager.getStudentinfo,
-  saveStudentinfo:electricManager.saveStudentinfo,
+  getelectricityinfo: electricManager.getelectricityinfo,
+  saveelectricityinfo:electricManager.saveelectricityinfo,
   deleteData: electricManager.deleteData,
-  getStudentinfobyId:electricManager.getStudentinfobyId,
-  updateStudentinfobyid:electricManager.updateStudentinfobyid
+  getelectricityinfobyId:electricManager.getelectricityinfobyId,
+  updateelectricityinfobyid:electricManager.updateelectricityinfobyid
 });
 
 const ElectricManager = (props) => {
@@ -40,41 +40,35 @@ const ElectricManager = (props) => {
   const columns = [
     {
 
-      title: '学号',
-      dataIndex: 'student_id',
-      align:"center"
-      // render: text => <a>{text}</a>,
-    },
-    {
-
-      title: '班级',
-      dataIndex: 'class_id',
-      align:"center"
-      // render: text => <a>{text}</a>,
-    },
-    {
-      title: '姓名',
-      dataIndex: 'name',
-      align:"center"
-      // render: text => <a>{text}</a>,
-    },
-    {
-      title:'性别',
-      dataIndex: 'sex',
-      align:"center"
-    },
-    {
-      title: '寝室编号',
+      title: '宿舍编号',
       dataIndex: 'dormitory_id',
       align:"center"
-
+      // render: text => <a>{text}</a>,
     },
     {
-      title: '联系方式',
-      dataIndex: 'phone',
+
+      title: '历史度数',
+      dataIndex: 'degrees_history',
+      align:"center"
+      // render: text => <a>{text}</a>,
+    },
+    {
+      title: '当月度数',
+      dataIndex: 'current',
+      align:"center"
+      // render: text => <a>{text}</a>,
+    },
+    {
+      title:'电费单价',
+      dataIndex: 'price',
+      align:"center"
+    },
+    {
+      title: '本月电费',
+      dataIndex: 'balance',
       align:"center"
 
-    }, {
+    },{
       title: '操作',
       align:"center",
 
@@ -90,7 +84,7 @@ const ElectricManager = (props) => {
       page_size:props.page_size,
       page_no:1
     }
-    props.getStudentinfo(prams);
+    props.getelectricityinfo(prams);
    
   }, []);
   const [form] = Form.useForm();
@@ -133,7 +127,7 @@ const ElectricManager = (props) => {
     if(state.modelTitle==="修改信息"){
       console.log(prams);
       prams={...prams,id:state.id};
-      props.updateStudentinfobyid(prams,()=>{
+      props.updateelectricityinfobyid(prams,()=>{
         setState({
           ...state,
           loading: true
@@ -149,11 +143,11 @@ const ElectricManager = (props) => {
           page_size:props.page_size,
           page_no:props.page_no
         }
-        props.getStudentinfo(prams);
+        props.getelectricityinfo(prams);
 
     });
     }else{
-      props.saveStudentinfo(prams,()=>{
+      props.saveelectricityinfo(prams,()=>{
         setState({
           ...state,
           loading: true
@@ -169,7 +163,7 @@ const ElectricManager = (props) => {
           page_size:props.page_size,
           page_no:props.page_no
         }
-        props.getStudentinfo(prams);
+        props.getelectricityinfo(prams);
 
     });
 
@@ -193,9 +187,9 @@ const ElectricManager = (props) => {
   const addUser = (<Form {...layout} form={form}  name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
 
     <Form.Item
-      name={['user', 'name']}
-      initialvalue="dsh"
-      label="姓名"
+      name={['user', 'degrees_history']}
+     
+      label="历史度数"
       rules={[
         {
           required: true,
@@ -205,9 +199,9 @@ const ElectricManager = (props) => {
       <Input />
     </Form.Item>
     <Form.Item
-      name={['user', 'phone']}
+      name={['user', 'current']}
    
-      label="联系方式"
+      label="当月度数"
       rules={[
         {
           required: true,
@@ -218,10 +212,10 @@ const ElectricManager = (props) => {
     </Form.Item>
     
     <Form.Item 
-    name={['user', 'dormitory_id']}
+    name={['user', 'balance']}
    
 
-    label="寝室编号"
+    label="当月电费"
     rules={[
       {
         required: true,
@@ -279,7 +273,7 @@ const ElectricManager = (props) => {
   };
   const openlayer = (val,id) => {
     if(id>=0){
-      props.getStudentinfobyId({id});
+      props.getelectricityinfobyId({id});
     }
   
     setState({
@@ -304,7 +298,7 @@ const ElectricManager = (props) => {
         page_size:props.page_size,
         page_no:props.page_no
       }
-      props.getStudentinfo(prams);
+      props.getelectricityinfo(prams);
       
     });
   }
@@ -314,10 +308,10 @@ const ElectricManager = (props) => {
       page_size:page_size,
       page_no:page
     }
-    props.getStudentinfo(prams);
+    props.getelectricityinfo(prams);
   }
   return (
-    <div className="systemPage">
+    <div className="electricManager">
       <div>
         <div className="btn_wrap" onClick={() => openlayer("新增账号",-1)}>
           <Button type="primary" block={true}>
