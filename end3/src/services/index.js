@@ -38,5 +38,12 @@ export const getelectricityinfobyid = prams => axios.post('/api/electricityinfo/
 export const updateelectricityinfobyid = prams => axios.post('/api/electricityinfo/updateelectricityinfobyid', prams);
 export const deleteelectricityinfobyids = prams => axios.post('/api/electricityinfo/deleteelectricityinfobyids', prams);
 
+//报修管理
+export const savemaintenanceinfo = prams => axios.post('/api/maintenanceinfo/savemaintenanceinfo', prams);
+export const getmaintenanceinfo = prams => axios.post('/api/maintenanceinfo/getmaintenanceinfo', prams);
+export const getmaintenanceinfobyid = prams => axios.post('/api/maintenanceinfo/getmaintenanceinfobyid', prams);
+export const updatemaintenanceinfobyid = prams => axios.post('/api/maintenanceinfo/updatemaintenanceinfobyid', prams);
+export const deletemaintenanceinfobyids = prams => axios.post('/api/maintenanceinfo/deletemaintenanceinfobyids', prams);
+
 
 

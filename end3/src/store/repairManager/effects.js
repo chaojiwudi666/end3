@@ -1,75 +1,117 @@
-import {} from '../../services';
+import { getmaintenanceinfo, savemaintenanceinfo, getmaintenanceinfobyid, deletemaintenanceinfobyids, updatemaintenanceinfobyid } from '../../services';
 import Actions from '../../utils/index';
-
+import { message } from 'antd';
+message.config({
+    top: 20,
+    duration: 1,
+    maxCount: 3,
+    rtl: true,
+});
 //3.3添加接口实现
 const effects = dispatch => ({
-    // async TravelInitInfo(prams, state) {
-       
-    //     let pram = {
-    //         appId: prams,
-    //     };
-    //     let res = await TravelInitInfo(pram);
-   
-    //     dispatch({
-    //         type: 'home/TRAVEL_INIT_INFO',
-    //         payload: {
-    //             initInfo: res.data.Data,
-    //         }
-    //     });
-    // },
-    // async GetTravelIndexPage(prams, state) {
-       
-        
-    //     let res = await GetTravelIndexPage(prams);
-   
-    //     dispatch({
-    //         type: 'home/TRAVEL_CONTENT_INFO',
-    //         payload: {
-    //             contentInfo: res.data.Data,
-    //         }
-    //     });
-    // },
-    // async GetTravelFooter(prams, state) {
-       
-    //     let pram = {
-    //         appId: prams,
-    //     };
-    //     let res = await GetTravelFooter(pram);
-        
-    //     dispatch({
-    //         type: 'home/TRAVEL_BOTTOM_INFO',
-    //         payload: {
-    //             bottomInfo: res.data.Data,
-    //         }
-    //     });
-        
-    // }, async getHotActivities(prams, state) {
-        
-       
-    //     let res = await GetTravelContentListBase({
-    //         pageNo: 1,
-    //         appId : prams.appId,
-    //         pageSize: prams.pageSize,
-    //         modilarId :prams.modilarId
-    //     });    
-    //     dispatch({
-    //         type: 'home/GET_INFOLIST',
-    //         payload: {                
-    //             infoList: res.data.Data.Contents, 
-    //             pageSize:prams.pageSize,
-               
-    //             isHasMore:res.data.Data.length&&(res.data.Data.length%10===0)?true:false                                      
-    //         }
-    //     });
-    // },async postTravelPraise(prams, state) {                   
-        
-      
-    //     let res = await TravelPraise({requestParams:Actions.DES(JSON.stringify(prams)).toString()});
-    //     console.log(res);
-        
-        
-   
-    // }
+    async getmaintenanceinfo(prams, state, callback) {
+
+
+        let res = await getmaintenanceinfo(prams);
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+            let listData = [];
+            let page_no = 0;
+            if (res.data.data.length === 0) {
+                let data = await getmaintenanceinfo({ ...prams, page_no: prams.page_no > 1 ? prams.page_no - 1 : 1 })
+                listData = Actions.formateListData(data.data.data);
+                page_no = data.data.page_no;
+            } else {
+                listData = Actions.formateListData(res.data.data);
+                page_no = res.data.page_no;
+            }
+            console.log(listData);
+            listData.forEach((item) => {
+
+                if (item.sex === 1) {
+                    item.sex = "男";
+                } else if (item.sex === 2) {
+                    item.sex = "女"
+                }
+            });
+
+            dispatch({
+                type: 'maintenanceManager/GET_LISTDATA',
+                payload: {
+                    listData: listData,
+                    total: res.data.total,
+                    page_no: page_no
+                }
+            });
+
+        }
+
+    }, async savemaintenanceinfo(prams, state, callback) {
+
+
+        let res = await savemaintenanceinfo(prams);
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+            callback && callback();
+        }
+        console.log(res);
+    }, async deleteData(prams, state, callback) {
+        let res = await deletemaintenanceinfobyids(prams);
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+            callback && callback();
+            // dispatch({
+            //     type: 'systemManager/DELETE_DATA',
+            //     payload: {
+            //         data: prams,
+            //     }
+            // });
+        }
+
+    }, async getmaintenanceinfobyId(prams, state, callback) {
+
+
+        let res = await getmaintenanceinfobyid(prams);
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+
+            dispatch({
+                type: 'maintenanceManager/GET_USERINFO',
+                payload: {
+                    userInfo: {
+                        user: {
+                            phone:res.data.data[0].phone,
+                            sex:res.data.data[0].sex,
+                         
+                        
+                        
+                            dormitory_number:res.data.data[0].dormitory_number,
+                            class_id:res.data.data[0].class_id,
+                            name: res.data.data[0].name,                                            
+                            remark: res.data.data[0].remark,       
+                        }
+
+                    }
+                }
+            });
+        }
+
+    },
+    async updatemaintenanceinfobyid(prams, state, callback) {
+
+
+        let res = await updatemaintenanceinfobyid(prams);
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+            callback && callback();
+
+        }
+    }
 
 });
 
