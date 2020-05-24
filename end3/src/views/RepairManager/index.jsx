@@ -48,7 +48,7 @@ const RepairManager = (props) => {
     },
     {
       title: '维修类型',
-      dataIndex: 'name',
+      dataIndex: 'maintenance_type',
       align:"center"
       // render: text => <a>{text}</a>,
     },
@@ -56,6 +56,11 @@ const RepairManager = (props) => {
     {
       title: '联系方式',
       dataIndex: 'phone',
+      align:"center"
+
+    },{
+      title: '报修时间',
+      dataIndex: 'create_time',
       align:"center"
 
     }, {
@@ -69,7 +74,7 @@ const RepairManager = (props) => {
   ];
  
   useEffect(() => {
-    console.log("update");
+   
     let prams = {
       page_size:props.page_size,
       page_no:1
@@ -84,11 +89,11 @@ const RepairManager = (props) => {
     //   ...state,
     //   listData:props.listData
     // });
-    console.log(props.userInfo.user);
+    
     if(state.visible){
       form.setFieldsValue({user:{
         ...props.userInfo.user,
-        "sex":props.userInfo.user.sex+''
+        "maintenance_type":props.userInfo.user.maintenance_type+''
       }});
     }
     
@@ -113,7 +118,7 @@ const RepairManager = (props) => {
   };
   const onFinish = values => {
     let prams = values.user;
-
+    console.log(values);
     if(state.modelTitle==="修改信息"){
       console.log(prams);
       prams={...prams,id:state.id};
@@ -202,7 +207,7 @@ const RepairManager = (props) => {
     </Form.Item>
        
     
-    <Form.Item name={['user', 'maintenanceType']} label="维修类型"  
+    <Form.Item name={['user', 'maintenance_type']} label="维修类型"  
     rules={[
       {
         required: true,
@@ -210,13 +215,13 @@ const RepairManager = (props) => {
     ]}
       >
     <Select style={{ width: 120 }} >
-      <Option value="1">地面/地砖</Option>
-      <Option value="2">电器/开关/线路</Option>
-      <Option value="3">卫浴洁具类</Option>
-      <Option value="4">床/书橱/椅子</Option>
-      <Option value="5">管道堵塞疏通</Option>
-      <Option value="6">门窗</Option>  
-      <Option value="7">其他</Option>          
+      <Option value="0">地面/地砖</Option>
+      <Option value="1">电器/开关/线路</Option>
+      <Option value="2">卫浴洁具类</Option>
+      <Option value="3">床/书橱/椅子</Option>
+      <Option value="4">管道堵塞疏通</Option>
+      <Option value="5">门窗</Option>  
+      <Option value="6">其他</Option>          
     </Select>
     </Form.Item>
     <Form.Item name={['user', 'remark']} label="备注" 

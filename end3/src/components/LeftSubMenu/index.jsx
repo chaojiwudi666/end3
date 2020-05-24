@@ -108,7 +108,7 @@ const handleClick = (e)=>{
                     imgObj.map((val,i)=>{
                       if(val.key===item.icon){
                         return(
-                          <span>
+                          <span key={i+val}>
                             {val.img}
                           <span>{item.title}</span>
                           </span>

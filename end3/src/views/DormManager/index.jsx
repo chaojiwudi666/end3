@@ -41,6 +41,13 @@ const DormManager = (props) => {
     {
 
       title: '宿舍编号',
+      dataIndex: 'dormitory_number',
+      align:"center"
+      // render: text => <a>{text}</a>,
+    },
+    {
+
+      title: '宿舍房号',
       dataIndex: 'hostel_id',
       align:"center"
       // render: text => <a>{text}</a>,

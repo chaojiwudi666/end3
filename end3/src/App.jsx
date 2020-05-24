@@ -122,6 +122,11 @@ const App = () => {
         icon:"UserAddOutlined",
         title:"个人信息管理",
         key:"userInfoManager"
+      },{
+        path:"/dormrepair",
+        icon:"UserAddOutlined",
+        title:"寝室报修",
+        key:"dormrepair"
       }]
       break;
     }

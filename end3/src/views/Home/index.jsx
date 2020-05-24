@@ -15,62 +15,175 @@ const mapState = ({home}) => ({
 const mapDispatch = ( {home} ) => ({
 
 });
-const data = [{
-  path:"/home",
-  icon:<BarsOutlined />,
-  title:"首页",
-  key:"home"
-},{
-  path:"/systemManager",
-  icon:<SettingOutlined />,
-  title:"系统管理",
-  key:"systemManager"
-},{
-  path:"/electricManager",
-  icon:<ThunderboltOutlined />,
-  title:"电费管理",
-  key:"electricManager"
-},{
-  path:"/userInfoManager",
-  icon:<UserAddOutlined />,
-  title:"个人信息管理",
-  key:"userInfoManager"
-},{
-  path:"/dormManager",
-  icon:<ShopOutlined />,
-  title:"寝室信息管理",
-  key:"dormManager"
-},{
-  path:"/hygieneManager",
-  icon:<SafetyOutlined />,
-  title:"卫生管理",
-  key:"hygieneManager"
-},{
-  path:"/visitManager",
-  icon:<SolutionOutlined />,
-  title:"来访人员管理",
-  key:"visitManager"
-},{
-  path:"/repairManager",
-  icon:<ToolOutlined />,
-  title:"报修管理",
-  key:"repairManager"
-},{
-  path:"/studentManager",
-  icon:<ToolOutlined />,
-  title:"学生信息管理",
-  key:"studentManager"
-}]
+
+// const data = [{
+//   path:"/home",
+//   icon:<BarsOutlined />,
+//   title:"首页",
+//   key:"home"
+// },{
+//   path:"/systemManager",
+//   icon:<SettingOutlined />,
+//   title:"系统管理",
+//   key:"systemManager"
+// },{
+//   path:"/electricManager",
+//   icon:<ThunderboltOutlined />,
+//   title:"电费管理",
+//   key:"electricManager"
+// },{
+//   path:"/userInfoManager",
+//   icon:<UserAddOutlined />,
+//   title:"个人信息管理",
+//   key:"userInfoManager"
+// },{
+//   path:"/dormManager",
+//   icon:<ShopOutlined />,
+//   title:"寝室信息管理",
+//   key:"dormManager"
+// },{
+//   path:"/hygieneManager",
+//   icon:<SafetyOutlined />,
+//   title:"卫生管理",
+//   key:"hygieneManager"
+// },{
+//   path:"/visitManager",
+//   icon:<SolutionOutlined />,
+//   title:"来访人员管理",
+//   key:"visitManager"
+// },{
+//   path:"/repairManager",
+//   icon:<ToolOutlined />,
+//   title:"报修管理",
+//   key:"repairManager"
+// },{
+//   path:"/studentManager",
+//   icon:<ToolOutlined />,
+//   title:"学生信息管理",
+//   key:"studentManager"
+// }]
 const Home = (props)=> {
   const [nowTime=Actions.getNowTime(),setNowTime] = useState();
-  
+  const [menuData=[],setMenuData] = useState();
   useEffect(() => {
+    let role_id = JSON.parse(sessionStorage.getItem("userInfo")).role_id;
+    console.log(role_id);
+    switch(role_id){
+      case 1:setMenuData([{
+        path:"/home",
+        icon:<BarsOutlined/>,
+        title:"首页",
+        key:"home"
+      },{
+        path:"/systemManager",
+        icon:<SettingOutlined/>,
+        title:"系统管理",
+        key:"systemManager"
+      },{
+        path:"/electricManager",
+        icon:<ThunderboltOutlined/>,
+        title:"电费管理",
+        key:"electricManager"
+      },{
+        path:"/userInfoManager",
+        icon:<UserAddOutlined/>,
+        title:"个人信息管理",
+        key:"userInfoManager"
+      },{
+        path:"/dormManager",
+        icon:<ShopOutlined/>,
+        title:"寝室信息管理",
+        key:"dormManager"
+      },{
+        path:"/hygieneManager",
+        icon:<SafetyOutlined/>,
+        title:"卫生管理",
+        key:"hygieneManager"
+      },{
+        path:"/visitManager",
+        icon:<SolutionOutlined/>,
+        title:"来访人员管理",
+        key:"visitManager"
+      },{
+        path:"/repairManager",
+        icon:<ToolOutlined/>,
+        title:"报修管理",
+        key:"repairManager"
+      },{
+        path:"/studentManager",
+        icon:<ToolOutlined/>,
+        title:"学生信息管理",
+        key:"studentManager"
+      }])
+      break;
+      case 2: setMenuData([{
+        path:"/home",
+        icon:<BarsOutlined/>,
+        title:"首页",
+        key:"home"
+      },{
+        path:"/electricManager",
+        icon:<ThunderboltOutlined/>,
+        title:"电费管理",
+        key:"electricManager"
+      },{
+        path:"/userInfoManager",
+        icon:<UserAddOutlined/>,
+        title:"个人信息管理",
+        key:"userInfoManager"
+      },{
+        path:"/dormManager",
+        icon:<ShopOutlined/>,
+        title:"寝室信息管理",
+        key:"dormManager"
+      },{
+        path:"/hygieneManager",
+        icon:<SafetyOutlined/>,
+        title:"卫生管理",
+        key:"hygieneManager"
+      },{
+        path:"/visitManager",
+        icon:<SolutionOutlined/>,
+        title:"来访人员管理",
+        key:"visitManager"
+      },{
+        path:"/repairManager",
+        icon:<ToolOutlined/>,
+        title:"报修管理",
+        key:"repairManager"
+      },{
+        path:"/studentManager",
+        icon:<ToolOutlined/>,
+        title:"学生信息管理",
+        key:"studentManager"
+      }])
+      break;
+      case 4:setMenuData([{
+        path:"/home",
+        icon:<BarsOutlined/>,
+        title:"首页",
+        key:"home"
+      },{
+        path:"/userInfoManager",
+        icon:<UserAddOutlined/>,
+        title:"个人信息管理",
+        key:"userInfoManager"
+      },{
+        path:"/dormrepair",
+        icon:<UserAddOutlined/>,
+        title:"寝室报修",
+        key:"dormrepair"
+      }])
+      break;
+    }
     let Timer;
    
     Timer = setInterval((function() {
       setNowTime(Actions.getNowTime());
     }), 1000)
     return () => clearInterval(Timer);
+  
+    
   }, []);
 const navClick=(item)=>{
   props.history.push(item.path);
@@ -104,7 +217,7 @@ const navClick=(item)=>{
           </p>
           <ul className="Nav_list_wrap clearfix">
             {
-              data.map((item)=>{
+              menuData.map((item)=>{
                 return (
                   <li key={item.key} onClick={()=>{
                     navClick(item)

@@ -24,7 +24,7 @@ export const state = {
 };
 
 export default {
-  name: 'repairManager',
+  name: 'dormrepair',
   state,
   reducers,
   effects
