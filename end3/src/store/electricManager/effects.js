@@ -80,14 +80,7 @@ const effects = dispatch => ({
                 payload: {
                     userInfo: {
                         user: {
-                            layer_id:res.data.data[0].layer_id,
-                            floor_id:res.data.data[0].floor_id,
-                         
-                        
-                        
-                            hostel_id:res.data.data[0].hostel_id,
-                                                                      
-                            remark: res.data.data[0].remark,       
+                            ...res.data.data[0]       
                         }
 
                     }

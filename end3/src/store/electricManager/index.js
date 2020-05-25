@@ -5,13 +5,13 @@ export const state = {
   userList:[],
   userInfo:{
     user:{
-      phone:'',
-      sex:1,
+      degrees_history:'',
+      current:"",
      
-      name:"",
+      price:0.62,
       remark:"",
-      dormitory_id:0,
-      class_id:""
+      dormitory_number:0,
+      balance:""
     }
     
   },

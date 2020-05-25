@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Radio, Divider, Button, Modal, Form, Input ,Select } from 'antd';
-
-import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined } from '@ant-design/icons';
+import { Table, Radio, Divider, Button, Modal, Form, Input ,Select,message } from 'antd';
+import ExportJsonExcel from "js-export-excel";
+import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined,DiffOutlined } from '@ant-design/icons';
 import './index.scss';
 const { Option } = Select;
-
+message.config({
+  top: 20,
+  duration: 1,
+  maxCount: 3,
+  rtl: true,
+});
 
 //4.1对应映射的字段 
 const mapState = ({ electricManager }) => ({
@@ -41,7 +46,7 @@ const ElectricManager = (props) => {
     {
 
       title: '宿舍编号',
-      dataIndex: 'dormitory_id',
+      dataIndex: 'dormitory_number',
       align:"center"
       // render: text => <a>{text}</a>,
     },
@@ -98,7 +103,7 @@ const ElectricManager = (props) => {
     if(state.visible){
       form.setFieldsValue({user:{
         ...props.userInfo.user,
-        "sex":props.userInfo.user.sex+''
+      
       }});
     }
     
@@ -111,6 +116,62 @@ const ElectricManager = (props) => {
     // });
    console.log(props.page_no);
   }, [props.page_no]);
+
+
+//调用方法
+const downloadExcel = () => {      
+      var option={};
+      let dataTable = [];
+      if (props.listData) {
+        props.listData.forEach((item,index)=>{
+          let obj = {
+            '寝室编号': item.dormitory_number,
+            '历史度数': item.degrees_history,
+            '当月度数': item.current,
+            "电费单价": item.price,
+            "本月电费": item.balance,
+          }
+          dataTable.push(obj);
+        });
+
+
+        // for (let i in props.listData) {
+         
+        //     let obj = {
+        //       '项目名称': currentPro.data[i].name,
+        //       '项目地址': currentPro.data[i].address,
+        //       '考勤范围': currentPro.data[i].radius,
+        //     }
+        //     dataTable.push(obj);
+          
+        // }
+      }
+      option.fileName = '寝室电费'
+      option.datas=[
+        {
+          sheetData:dataTable,
+          sheetName:'sheet',
+          sheetFilter:['寝室编号','历史度数','当月度数','电费单价','本月电费'],
+          sheetHeader:['寝室编号','历史度数','当月度数','电费单价','本月电费'],
+        }
+      ];
+  
+      var toExcel = new ExportJsonExcel(option); //new
+      toExcel.saveExcel();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -121,10 +182,31 @@ const ElectricManager = (props) => {
       name: record.name,
     }),
   };
+  // const onValuesChange = (pro, changedValues)=>{        
+  //     if(changedValues.user.current&&changedValues.user.degrees_history){
+  //       if(changedValues.user.degrees_history>changedValues.user.current){
+  //         form.setFieldsValue({user:{
+  //           ...changedValues.user,
+  //           "current":changedValues.user.degrees_history
+          
+  //         }});
+
+  //       }
+        
+  //     }
+
+
+    
+   
+  // }
   const onFinish = values => {
     let prams = values.user;
 
     if(state.modelTitle==="修改信息"){
+      if(prams.degrees_history>prams.current){
+        message.error("当月读书度数不能小于历史度数");
+        return;
+      }
       console.log(prams);
       prams={...prams,id:state.id};
       props.updateelectricityinfobyid(prams,()=>{
@@ -138,6 +220,7 @@ const ElectricManager = (props) => {
             loading: false,
             visible: false
           });
+          form.resetFields();
         }, 1000);
         let prams = {
           page_size:props.page_size,
@@ -158,6 +241,7 @@ const ElectricManager = (props) => {
             loading: false,
             visible: false
           });
+          form.resetFields();
         }, 1000);
         let prams = {
           page_size:props.page_size,
@@ -184,8 +268,21 @@ const ElectricManager = (props) => {
     required: '${label}不能为空!',
   };
 
-  const addUser = (<Form {...layout} form={form}  name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
-
+  const addUser = (<Form {...layout} form={form}  name="nest-messages" 
+  // onValuesChange={onValuesChange} 
+  onFinish={onFinish} validateMessages={validateMessages}>
+<Form.Item
+      name={['user', 'dormitory_number']}
+     
+      label="寝室编号"
+      rules={[
+        {
+          required: true,
+        },
+      ]}
+    >
+      <Input />
+    </Form.Item>
     <Form.Item
       name={['user', 'degrees_history']}
      
@@ -209,47 +306,8 @@ const ElectricManager = (props) => {
       ]}
     >
       <Input />
-    </Form.Item>
+    </Form.Item> 
     
-    <Form.Item 
-    name={['user', 'balance']}
-   
-
-    label="当月电费"
-    rules={[
-      {
-        required: true,
-      },
-    ]}>
-    <Input/>
-    </Form.Item>
-    <Form.Item 
-    name={['user', 'class_id']}
-   
-
-    label="班级"
-    rules={[
-      {
-        required: true,
-      },
-    ]}>
-    <Input/>
-    </Form.Item>
-    <Form.Item name={['user', 'sex']} label="性别"  
-    rules={[
-      {
-        required: true,
-      },
-    ]}
-      >
-    <Select style={{ width: 120 }} >
-      <Option value="1">男</Option>
-      <Option value="2">女</Option>
-      
-       
-   
-    </Select>
-    </Form.Item>
     <Form.Item name={['user', 'remark']} label="备注" 
      
       >
@@ -270,8 +328,10 @@ const ElectricManager = (props) => {
       ...state,
       visible: false
     });
+    form.resetFields();
   };
   const openlayer = (val,id) => {
+  
     if(id>=0){
       props.getelectricityinfobyId({id});
     }
@@ -288,7 +348,7 @@ const ElectricManager = (props) => {
     //   console.log(id);
     //     return(item.id!==id);
     // });
-    // console.log(nowData);
+    console.log(id);
     let arr=[];
     arr.push(id);
     props.deleteData({
@@ -313,10 +373,10 @@ const ElectricManager = (props) => {
   return (
     <div className="electricManager">
       <div>
-        <div className="btn_wrap" onClick={() => openlayer("新增账号",-1)}>
+        <div className="btn_wrap" onClick={() =>downloadExcel()}>
           <Button type="primary" block={true}>
-            <PlusOutlined />
-                  新增
+          <DiffOutlined />
+                  导出成Excel
               </Button>
 
         </div>
