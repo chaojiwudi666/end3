@@ -1,64 +1,165 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Radio, Divider, Button, Modal, Form, Input } from 'antd';
-
-import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined } from '@ant-design/icons';
+import { Table, Radio, Divider, Button, Modal, Form, Input ,Select,message,Rate  } from 'antd';
+import ExportJsonExcel from "js-export-excel";
+import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined,DiffOutlined,SearchOutlined } from '@ant-design/icons';
 import './index.scss';
+const { Option } = Select;
+message.config({
+  top: 20,
+  duration: 1,
+  maxCount: 3,
+  rtl: true,
+});
+
 //4.1对应映射的字段 
-const mapState = ({ systemManager }) => ({
-  userInfo:systemManager.userInfo,
-  data: systemManager.data,
+const mapState = ({ hygieneManager }) => ({
+  userInfo:hygieneManager.userInfo,
+  listData: hygieneManager.listData,
+  page_no:hygieneManager.page_no,
+  page_size:hygieneManager.page_size,
+  total:hygieneManager.total
 
 
 });
 //4.2需要使用的http api接口 和 需要使用的方法
-const mapDispatch = ({ systemManager }) => ({
-  getadmininfo: systemManager.getadmininfo,
-  deleteData: systemManager.deleteData
+const mapDispatch = ({ hygieneManager }) => ({
+  gethygieneinfo: hygieneManager.gethygieneinfo,
+  savehygieneinfo:hygieneManager.savehygieneinfo,
+  deleteData: hygieneManager.deleteData,
+  gethygieneinfobyId:hygieneManager.gethygieneinfobyId,
+  updatehygieneinfobyid:hygieneManager.updatehygieneinfobyid
 });
 
 const HygieneManager = (props) => {
+  
+ 
   const [state, setState] = useState({
+    id:0,
     visible: false,
     loading: false,
     modelTitle:"",
-    listData:props.data,
+    listData:[],
+    dormitory_number:""
   });
   const columns = [
     {
-      title: '姓名',
-      dataIndex: 'name',
+
+      title: '宿舍编号',
+      dataIndex: 'dormitory_number',
+      align:"center"
       // render: text => <a>{text}</a>,
     },
     {
-      title: '账号',
-      dataIndex: 'age',
+
+      title: '寝室卫生评分',
+      dataIndex: 'hygienic_condition',
+      align:"center",
+    render:  text=> <Rate value={text} disabled/>,
     },
     {
-      title: '创建时间',
-      dataIndex: 'address',
-    }, {
+      title: '评分时间',
+      dataIndex: 'update_time',
+      align:"center",
+     
+    },{
       title: '操作',
+      align:"center",
+
       dataIndex: '',
       key: 'x',
-      render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息")}/><CloseSquareOutlined onClick={()=>handleDelete(record.key)}/></div>,
+      render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息",record.id)}/></div>,
     },
   ];
-  // const editModelshow = (val)=>{
-  //     setState({
-  //       ...state,
-  //       visible:true
-  //     });
-  // }
+ 
   useEffect(() => {
-    // props.getadmininfo();
-    setState({
-      ...state,
-      listData:props.data
-    });
-    console.log(props.data);
-  }, [props.data]);
+    console.log("update");
+    let prams = {
+      page_size:props.page_size,
+      page_no:1
+    }
+    props.gethygieneinfo(prams);
+   
+  }, []);
+  const [form] = Form.useForm();
+  useEffect(() => {
+   
+    // setState({
+    //   ...state,
+    //   listData:props.listData
+    // });
+    console.log(props.userInfo.user);
+    if(state.visible){
+      form.setFieldsValue({user:{
+        ...props.userInfo.user,
+      
+      }});
+    }
+    
+  }, [props.userInfo]);
+   useEffect(() => {
+   
+    // setState({
+    //   ...state,
+    //   listData:props.listData
+    // });
+   console.log(props.listData);
+  }, [props.listData]);
+
+
+//调用方法
+const downloadExcel = () => {      
+      var option={};
+      let dataTable = [];
+      if (props.listData) {
+        props.listData.forEach((item,index)=>{
+          let obj = {
+            '寝室编号': item.dormitory_number,
+            '评分': item.hygienic_condition,
+            
+          }
+          dataTable.push(obj);
+        });
+
+
+        // for (let i in props.listData) {
+         
+        //     let obj = {
+        //       '项目名称': currentPro.data[i].name,
+        //       '项目地址': currentPro.data[i].address,
+        //       '考勤范围': currentPro.data[i].radius,
+        //     }
+        //     dataTable.push(obj);
+          
+        // }
+      }
+      option.fileName = '寝室卫生评分'
+      option.datas=[
+        {
+          sheetData:dataTable,
+          sheetName:'sheet',
+          sheetFilter:['寝室编号','评分'],
+          sheetHeader:['寝室编号','评分'],
+        }
+      ];
+  
+      var toExcel = new ExportJsonExcel(option); //new
+      toExcel.saveExcel();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -69,20 +170,76 @@ const HygieneManager = (props) => {
       name: record.name,
     }),
   };
-  const onFinish = values => {
+  // const onValuesChange = (pro, changedValues)=>{        
+  //     if(changedValues.user.current&&changedValues.user.degrees_history){
+  //       if(changedValues.user.degrees_history>changedValues.user.current){
+  //         form.setFieldsValue({user:{
+  //           ...changedValues.user,
+  //           "current":changedValues.user.degrees_history
+          
+  //         }});
 
-    setState({
-      ...state,
-      loading: true
+  //       }
+        
+  //     }
+
+
+    
+   
+  // }
+  const onFinish = values => {
+    let prams = values.user;
+
+    if(state.modelTitle==="修改信息"){
+     
+      console.log(prams);
+      prams={...prams,id:state.id};
+      props.updatehygieneinfobyid(prams,()=>{
+        setState({
+          ...state,
+          loading: true
+        });
+        setTimeout(() => {
+          setState({
+            ...state,
+            loading: false,
+            visible: false
+          });
+          form.resetFields();
+        }, 1000);
+        let prams = {
+          page_size:props.page_size,
+          page_no:props.page_no
+        }
+        props.gethygieneinfo(prams);
+
     });
-    setTimeout(() => {
-      setState({
-        ...state,
-        loading: false,
-        visible: false
-      });
-    }, 1000);
-    console.log(values);
+    }else{
+      props.savehygieneinfo(prams,()=>{
+        setState({
+          ...state,
+          loading: true
+        });
+        setTimeout(() => {
+          setState({
+            ...state,
+            loading: false,
+            visible: false
+          });
+          form.resetFields();
+        }, 1000);
+        let prams = {
+          page_size:props.page_size,
+          page_no:props.page_no
+        }
+        props.gethygieneinfo(prams);
+
+    });
+
+    }
+    
+    
+   
   };
   const layout = {
     labelCol: {
@@ -96,44 +253,30 @@ const HygieneManager = (props) => {
     required: '${label}不能为空!',
   };
 
-  const addUser = (<Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages} initialValues = {props.userInfo}>
-
+  const addUser = (<Form {...layout} form={form}  name="nest-messages" 
+  // onValuesChange={onValuesChange} 
+  onFinish={onFinish} validateMessages={validateMessages}>
+<Form.Item
+      name={['user', 'dormitory_number']}
+     
+      label="寝室编号"
+      
+    >
+      <Input readOnly/>
+    </Form.Item>
     <Form.Item
-      name={['user', 'name']}
-      initialvalue="dsh"
-      label="账户名称"
+      name={['user', 'hygienic_condition']}
+     
+      label="寝室卫生评分"
       rules={[
         {
           required: true,
         },
       ]}
     >
-      <Input />
-    </Form.Item>
-    <Form.Item
-      name={['user', 'phone']}
-   
-      label="账号(电话)"
-      rules={[
-        {
-          required: true,
-        },
-      ]}
-    >
-      <Input />
-    </Form.Item>
-    <Form.Item 
-    name={['user', 'password']}
-   
-
-    label="密码"
-    rules={[
-      {
-        required: true,
-      },
-    ]}>
-      <Input />
-    </Form.Item>
+      <Rate />
+    </Form.Item>   
+    
     <Form.Item name={['user', 'remark']} label="备注" 
      
       >
@@ -154,35 +297,82 @@ const HygieneManager = (props) => {
       ...state,
       visible: false
     });
+    form.resetFields();
   };
-  const openlayer = (val) => {
-    console.log(val);
+  const openlayer = (val,id) => {
+  
+    if(id>=0){
+      props.gethygieneinfobyId({id});
+    }
+  
     setState({
       ...state,
       modelTitle:val,
+      id:id,
       visible: true
     });
   }
-  const handleDelete = (key)=>{
-    let nowData = state.listData.filter(item=>{
-      console.log(key);
-        return(item.key!==key);
+  const handleDelete = (id)=>{
+    // let nowData = state.listData.filter(item=>{
+    //   console.log(id);
+    //     return(item.id!==id);
+    // });
+    console.log(id);
+    let arr=[];
+    arr.push(id);
+    props.deleteData({
+      ids:arr
+    },()=>{
+      let prams = {
+        page_size:props.page_size,
+        page_no:props.page_no
+      }
+      props.gethygieneinfo(prams);
+      
     });
-    console.log(nowData);
-    props.deleteData(nowData);
   }
-
+  const changePage = (page,page_size)=>{
+   
+    let prams = {
+      page_size:page_size,
+      page_no:page
+    }
+    props.gethygieneinfo(prams);
+  }
+  const searchData = ()=>{
+    props.gethygieneinfo({
+      page_size:10,
+      page_no:1,
+      dormitory_number:state.dormitory_number
+    });
+  }
+  const getSearchPhone = (e)=>{
+      setState({
+        ...state,
+        dormitory_number:e.target.value
+      });
+  }
   return (
-    <div className="systemPage">
-      <div>
-        <div className="btn_wrap" onClick={() => openlayer("新增账号")}>
+    <div className="hygieneManager">
+      <div className="top_btn">
+        <div className="btn_wrap" onClick={() =>downloadExcel()}>
           <Button type="primary" block={true}>
-            <PlusOutlined />
-                  新增
+          <DiffOutlined />
+                  导出成Excel
               </Button>
 
         </div>
+        <div className="search_wrap">
+
+          <Input  className="search_input" placeholder="请输入寝室编号" onChange={(e)=>getSearchPhone(e)}/>
+          <Button type="primary" icon={<SearchOutlined />} onClick={()=>searchData()}>
+            搜索
+          </Button>
+        </div>
+      </div>
         <Modal
+          forceRender
+          
           title={state.modelTitle}
           visible={state.visible}
           closable={false}
@@ -203,12 +393,12 @@ const HygieneManager = (props) => {
             ...rowSelection,
           }}
           columns={columns}
-          dataSource={state.listData}
-          pagination={{ position: ['bottomRight'], pageSize: 10 }}
+          dataSource={props.listData}
+          pagination={{ position: ['bottomRight'], pageSize: 10 ,total:props.total,onChange:changePage,current:props.page_no}}
         />
       </div>
 
-    </div>
+  
   );
 }
 

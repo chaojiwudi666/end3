@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Radio, Divider, Button, Modal, Form, Input ,Select } from 'antd';
+import { Table, Radio, Divider, Button, Modal, Form, Input ,Select, Popconfirm, message  } from 'antd';
 
 import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined } from '@ant-design/icons';
 import './index.scss';
@@ -14,7 +14,8 @@ const mapState = ({ repairManager }) => ({
   listData: repairManager.listData,
   page_no:repairManager.page_no,
   page_size:repairManager.page_size,
-  total:repairManager.total
+  total:repairManager.total,
+  dormitory_number:repairManager.dormitory_number
 
 
 });
@@ -24,7 +25,9 @@ const mapDispatch = ({ repairManager }) => ({
   savemaintenanceinfo:repairManager.savemaintenanceinfo,
   deleteData: repairManager.deleteData,
   getmaintenanceinfobyId:repairManager.getmaintenanceinfobyId,
-  updatemaintenanceinfobyid:repairManager.updatemaintenanceinfobyid
+  updatemaintenanceinfobyid:repairManager.updatemaintenanceinfobyid,
+  updatemaintenancestatebyid:repairManager.updatemaintenancestatebyId,
+  
 });
 
 const RepairManager = (props) => {
@@ -36,6 +39,7 @@ const RepairManager = (props) => {
     loading: false,
     modelTitle:"",
     listData:[],
+    dormitory_number:""
   });
   const columns = [
 
@@ -64,6 +68,19 @@ const RepairManager = (props) => {
       align:"center"
 
     }, {
+      title: "维修状态",
+      align:"center",
+      dataIndex: 'state',     
+      render: (text, record) => state.dormitory_number?(text===1?<div style={{"color":"green"}}>未维修</div>:<div style={{"color":"red"}}>已维修</div>):(text===1?<Popconfirm
+      title="确定已维修?"
+      onConfirm={()=>changeState(record.id)}
+      // onCancel={cancel}
+      okText="确定"
+      cancelText="取消"
+    >
+      <a href="#" style={{"color":"green"}}>未维修</a>
+    </Popconfirm>:<div style={{"color":"red"}}>已维修</div>)
+    },{
       title: '操作',
       align:"center",
 
@@ -72,13 +89,54 @@ const RepairManager = (props) => {
       render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息",record.id)}/><CloseSquareOutlined onClick={()=>handleDelete(record.id)}/></div>,
     },
   ];
+  const changeState = (id)=>{
+    let parmas = {
+      id:id
+    }
+    props.updatemaintenancestatebyid(parmas,()=>{
+      let prams = {
+        page_size:props.page_size,
+        page_no:props.page_no
+      }
+   
+      if(state.dormitory_number){
+        prams.dormitory_number=state.dormitory_number;
+      }
+      props.getmaintenanceinfo(prams);
+
+
+    });
+
+
+  }
  
   useEffect(() => {
+    let prams;
+    let dormitory_number = JSON.parse(sessionStorage.getItem("userInfo")).dormitory_number;
+    setState({
+      ...state,
+      dormitory_number:dormitory_number
+    });
+    console.log(dormitory_number);
    
-    let prams = {
-      page_size:props.page_size,
-      page_no:1
+    if(dormitory_number){
+      
+      prams= {
+        dormitory_number:dormitory_number,
+        page_size:props.page_size,
+        page_no:1
+      }
+
+    }else{
+      prams = {
+       
+        page_size:props.page_size,
+        page_no:1
+      }
+
     }
+   
+    
     props.getmaintenanceinfo(prams);
    
   }, []);
@@ -89,10 +147,11 @@ const RepairManager = (props) => {
     //   ...state,
     //   listData:props.listData
     // });
-    
+    console.log("userInfo",state.dormitory_number);
     if(state.visible){
       form.setFieldsValue({user:{
         ...props.userInfo.user,
+      
         "maintenance_type":props.userInfo.user.maintenance_type+''
       }});
     }
@@ -133,10 +192,14 @@ const RepairManager = (props) => {
             loading: false,
             visible: false
           });
+          form.resetFields();
         }, 1000);
         let prams = {
           page_size:props.page_size,
           page_no:props.page_no
+        }
+        if(state.dormitory_number){
+          prams.dormitory_number=state.dormitory_number;
         }
         props.getmaintenanceinfo(prams);
 
@@ -153,10 +216,14 @@ const RepairManager = (props) => {
             loading: false,
             visible: false
           });
+          form.resetFields();
         }, 1000);
         let prams = {
           page_size:props.page_size,
           page_no:props.page_no
+        }
+        if(state.dormitory_number){
+          prams.dormitory_number=state.dormitory_number;
         }
         props.getmaintenanceinfo(prams);
 
@@ -183,7 +250,7 @@ const RepairManager = (props) => {
 
     <Form.Item
       name={['user', 'dormitory_number']}
- 
+      
       label="寝室编号"
       rules={[
         {
@@ -191,7 +258,7 @@ const RepairManager = (props) => {
         },
       ]}
     >
-      <Input />
+      <Input readOnly={state.dormitory_number?"readOnly":""}/>
     </Form.Item>
     <Form.Item
       name={['user', 'phone']}
@@ -244,11 +311,14 @@ const RepairManager = (props) => {
       ...state,
       visible: false
     });
+    form.resetFields();
   };
   const openlayer = (val,id) => {
     if(id>=0){
+
       props.getmaintenanceinfobyId({id});
     }
+    
   
     setState({
       ...state,
@@ -256,6 +326,15 @@ const RepairManager = (props) => {
       id:id,
       visible: true
     });
+    if(id=-1){
+      if(state.dormitory_number){
+        form.setFieldsValue({user:{
+ 
+          "dormitory_number":state.dormitory_number,
+        
+        }});
+      }
+    }
   }
   const handleDelete = (id)=>{
     // let nowData = state.listData.filter(item=>{
@@ -272,6 +351,9 @@ const RepairManager = (props) => {
         page_size:props.page_size,
         page_no:props.page_no
       }
+      if(state.dormitory_number){
+        prams.dormitory_number=state.dormitory_number;
+      }
       props.getmaintenanceinfo(prams);
       
     });
@@ -281,6 +363,9 @@ const RepairManager = (props) => {
     let prams = {
       page_size:page_size,
       page_no:page
+    }
+    if(state.dormitory_number){
+      prams.dormitory_number=state.dormitory_number;
     }
     props.getmaintenanceinfo(prams);
   }

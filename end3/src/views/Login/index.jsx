@@ -108,13 +108,14 @@ const chooseType = (e)=>{
                     
                   </Radio.Group>
                   </Form.Item> */}
-
+                
                 <Form.Item  style={{"marginTop":"60px"}}>
                   <Button type="primary" htmlType="submit">
                     登录
                   </Button>
                 </Form.Item>
               </Form>
+              <p className="login_message">提示：学生登录初始密码为123456</p>
             </div>
           </div>
         </div>

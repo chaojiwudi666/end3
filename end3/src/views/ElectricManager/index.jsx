@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Radio, Divider, Button, Modal, Form, Input ,Select,message } from 'antd';
+import { Table, Radio, Divider, Button, Modal, Form, Input ,Select,message,InputNumber  } from 'antd';
 import ExportJsonExcel from "js-export-excel";
-import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined,DiffOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined,DiffOutlined,SearchOutlined  } from '@ant-design/icons';
 import './index.scss';
 const { Option } = Select;
 message.config({
@@ -41,6 +41,7 @@ const ElectricManager = (props) => {
     loading: false,
     modelTitle:"",
     listData:[],
+    dormitory_number:""
   });
   const columns = [
     {
@@ -64,7 +65,7 @@ const ElectricManager = (props) => {
       // render: text => <a>{text}</a>,
     },
     {
-      title:'电费单价',
+      title:'电费单价(元/度)',
       dataIndex: 'price',
       align:"center"
     },
@@ -79,7 +80,7 @@ const ElectricManager = (props) => {
 
       dataIndex: '',
       key: 'x',
-      render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息",record.id)}/><CloseSquareOutlined onClick={()=>handleDelete(record.id)}/></div>,
+      render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息",record.id)}/></div>,
     },
   ];
  
@@ -200,13 +201,17 @@ const downloadExcel = () => {
    
   // }
   const onFinish = values => {
+  
     let prams = values.user;
-
+    
     if(state.modelTitle==="修改信息"){
+  
       if(prams.degrees_history>prams.current){
-        message.error("当月读书度数不能小于历史度数");
+        console.log(prams.degrees_history,prams.current);
+        message.error("当月度数不能小于历史度数");
         return;
       }
+      
       console.log(prams);
       prams={...prams,id:state.id};
       props.updateelectricityinfobyid(prams,()=>{
@@ -293,7 +298,7 @@ const downloadExcel = () => {
         },
       ]}
     >
-      <Input />
+      <InputNumber  />
     </Form.Item>
     <Form.Item
       name={['user', 'current']}
@@ -305,7 +310,7 @@ const downloadExcel = () => {
         },
       ]}
     >
-      <Input />
+      <InputNumber  />
     </Form.Item> 
     
     <Form.Item name={['user', 'remark']} label="备注" 
@@ -370,9 +375,22 @@ const downloadExcel = () => {
     }
     props.getelectricityinfo(prams);
   }
+  const searchData = ()=>{
+    props.getelectricityinfo({
+      page_size:10,
+      page_no:1,
+      dormitory_number:state.dormitory_number
+    });
+  }
+  const getSearchPhone = (e)=>{
+      setState({
+        ...state,
+        dormitory_number:e.target.value
+      });
+  }
   return (
     <div className="electricManager">
-      <div>
+      <div className="top_btn">
         <div className="btn_wrap" onClick={() =>downloadExcel()}>
           <Button type="primary" block={true}>
           <DiffOutlined />
@@ -380,6 +398,14 @@ const downloadExcel = () => {
               </Button>
 
         </div>
+        <div className="search_wrap">
+
+          <Input  className="search_input" placeholder="请输入寝室编号" onChange={(e)=>getSearchPhone(e)}/>
+          <Button type="primary" icon={<SearchOutlined />} onClick={()=>searchData()}>
+            搜索
+          </Button>
+        </div>
+      </div>
         <Modal
           forceRender
           
@@ -408,7 +434,7 @@ const downloadExcel = () => {
         />
       </div>
 
-    </div>
+    
   );
 }
 

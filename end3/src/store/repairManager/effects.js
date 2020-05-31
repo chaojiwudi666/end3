@@ -1,4 +1,4 @@
-import { getmaintenanceinfo, savemaintenanceinfo, getmaintenanceinfobyid, deletemaintenanceinfobyids, updatemaintenanceinfobyid } from '../../services';
+import { getmaintenanceinfo, savemaintenanceinfo, getmaintenanceinfobyid,updatemaintenancestatebyid, deletemaintenanceinfobyids, updatemaintenanceinfobyid } from '../../services';
 import Actions from '../../utils/index';
 import { message } from 'antd';
 message.config({
@@ -35,15 +35,29 @@ const effects = dispatch => ({
                 item.maintenance_type=arr[item.maintenance_type];
                 
             });
+            if(prams.dormitory_number){
+                dispatch({
+                    type: 'repairManager/GET_LISTDATA',
+                    payload: {
+                        listData: listData,
+                        total: res.data.total,
+                        page_no: page_no,
+                        dormitory_number:prams.dormitory_number
+                    }
+                });
 
-            dispatch({
-                type: 'repairManager/GET_LISTDATA',
-                payload: {
-                    listData: listData,
-                    total: res.data.total,
-                    page_no: page_no
-                }
-            });
+            }else{
+                dispatch({
+                    type: 'repairManager/GET_LISTDATA',
+                    payload: {
+                        listData: listData,
+                        total: res.data.total,
+                        page_no: page_no
+                    }
+                });
+
+            }
+            
 
         }
 
@@ -104,7 +118,20 @@ const effects = dispatch => ({
             callback && callback();
 
         }
+    },
+    async updatemaintenancestatebyId(prams, state, callback) {
+
+
+        let res = await updatemaintenancestatebyid(prams);
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+            callback && callback();
+
+        }
     }
+
+
 
 });
 

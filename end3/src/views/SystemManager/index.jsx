@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Table, Radio, Divider, Button, Modal, Form, Input ,Select } from 'antd';
 
-import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined,SearchOutlined } from '@ant-design/icons';
 import './index.scss';
 const { Option } = Select;
 
@@ -36,6 +36,7 @@ const SystemManager = (props) => {
     loading: false,
     modelTitle:"",
     listData:[],
+    phone:""
   });
   const columns = [
     {
@@ -130,6 +131,7 @@ const SystemManager = (props) => {
             loading: false,
             visible: false
           });
+          form.resetFields();
         }, 1000);
         let prams = {
           page_size:props.page_size,
@@ -150,6 +152,7 @@ const SystemManager = (props) => {
             loading: false,
             visible: false
           });
+          form.resetFields();
         }, 1000);
         let prams = {
           page_size:props.page_size,
@@ -224,9 +227,7 @@ const SystemManager = (props) => {
     <Select style={{ width: 120 }} >
       <Option value="1">管理员</Option>
       <Option value="2">宿管员</Option>
-      <Option value="4">
-        学生
-      </Option>
+      
     </Select>
     </Form.Item>
     <Form.Item name={['user', 'remark']} label="备注" 
@@ -249,6 +250,7 @@ const SystemManager = (props) => {
       ...state,
       visible: false
     });
+    form.resetFields();
   };
   const openlayer = (val,id) => {
     if(id>=0){
@@ -289,9 +291,22 @@ const SystemManager = (props) => {
     }
     props.getadmininfo(prams);
   }
+  const searchData = ()=>{
+    props.getadmininfo({
+      page_size:10,
+      page_no:1,
+      phone:state.phone
+    });
+  }
+  const getSearchPhone = (e)=>{
+      setState({
+        ...state,
+        phone:e.target.value
+      });
+  }
   return (
     <div className="systemPage">
-      <div>
+      <div className="top_btn">
         <div className="btn_wrap" onClick={() => openlayer("新增账号",-1)}>
           <Button type="primary" block={true}>
             <PlusOutlined />
@@ -299,6 +314,14 @@ const SystemManager = (props) => {
               </Button>
 
         </div>
+        <div className="search_wrap">
+
+          <Input  className="search_input" placeholder="请输入账号" onChange={(e)=>getSearchPhone(e)}/>
+          <Button type="primary" icon={<SearchOutlined />} onClick={()=>searchData()}>
+            搜索
+          </Button>
+        </div>
+      </div>
         <Modal
           forceRender
           
@@ -325,7 +348,7 @@ const SystemManager = (props) => {
           dataSource={props.listData}
           pagination={{ position: ['bottomRight'], pageSize: 10 ,total:props.total,onChange:changePage,current:props.page_no}}
         />
-      </div>
+      
 
     </div>
   );

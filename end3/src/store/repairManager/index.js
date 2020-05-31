@@ -15,7 +15,7 @@ export const state = {
     }
     
   },
-  
+  dormitory_number:"",
   listData:[],
   page_no:1,
   page_size:10,

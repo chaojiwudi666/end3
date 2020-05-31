@@ -39,11 +39,6 @@ const App = () => {
         title:"电费管理",
         key:"electricManager"
       },{
-        path:"/userInfoManager",
-        icon:"UserAddOutlined",
-        title:"个人信息管理",
-        key:"userInfoManager"
-      },{
         path:"/dormManager",
         icon:"ShopOutlined",
         title:"寝室信息管理",
@@ -68,6 +63,11 @@ const App = () => {
         icon:"ToolOutlined",
         title:"学生信息管理",
         key:"studentManager"
+      },{
+        path:"/analysis",
+        icon:"ToolOutlined",
+        title:"统计分析",
+        key:"analysis"
       }]
       break;
       case 2: menuData = [{
@@ -123,10 +123,10 @@ const App = () => {
         title:"个人信息管理",
         key:"userInfoManager"
       },{
-        path:"/dormrepair",
-        icon:"UserAddOutlined",
-        title:"寝室报修",
-        key:"dormrepair"
+        path:"/repairManager",
+        icon:"ToolOutlined",
+        title:"报修管理",
+        key:"repairManager"
       }]
       break;
     }
@@ -142,18 +142,17 @@ const App = () => {
 const menu = (
  
     <div className="layoutBtn_wrap">
-        <a href="#/login" onClick={()=>loginOut()}>
+        <a  onClick={()=>loginOut()}>
           退出登录
         </a>
     </div>
   )
-console.log(loadableComponent('views/Login', {
-  model: 'store/login',
-  loadingType: 'full'
-}));
+
 const loginOut = ()=>{
   sessionStorage.setItem("isLogin",false);
   setIsLogin(false);
+  window.location.reload();
+  window.location.href="#/login";
 }
   return (
     <div className="root">

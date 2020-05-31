@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Table, Radio, Divider, Button, Modal, Form, Input ,Select } from 'antd';
 
-import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined,SearchOutlined } from '@ant-design/icons';
 import './index.scss';
 const { Option } = Select;
 
@@ -36,6 +36,7 @@ const StudentManager = (props) => {
     loading: false,
     modelTitle:"",
     listData:[],
+    student_id:""
   });
   const columns = [
     {
@@ -144,6 +145,7 @@ const StudentManager = (props) => {
             loading: false,
             visible: false
           });
+          form.resetFields();
         }, 1000);
         let prams = {
           page_size:props.page_size,
@@ -164,6 +166,7 @@ const StudentManager = (props) => {
             loading: false,
             visible: false
           });
+          form.resetFields();
         }, 1000);
         let prams = {
           page_size:props.page_size,
@@ -276,6 +279,7 @@ const StudentManager = (props) => {
       ...state,
       visible: false
     });
+    form.resetFields();
   };
   const openlayer = (val,id) => {
     if(id>=0){
@@ -316,9 +320,22 @@ const StudentManager = (props) => {
     }
     props.getStudentinfo(prams);
   }
+  const searchData = ()=>{
+    props.getStudentinfo({
+      page_size:10,
+      page_no:1,
+      student_id:state.student_id
+    });
+  }
+  const getSearchPhone = (e)=>{
+      setState({
+        ...state,
+        student_id:e.target.value
+      });
+  }
   return (
     <div className="systemPage">
-      <div>
+     <div className="top_btn">
         <div className="btn_wrap" onClick={() => openlayer("新增账号",-1)}>
           <Button type="primary" block={true}>
             <PlusOutlined />
@@ -326,6 +343,14 @@ const StudentManager = (props) => {
               </Button>
 
         </div>
+        <div className="search_wrap">
+
+          <Input  className="search_input" placeholder="请输入学号" onChange={(e)=>getSearchPhone(e)}/>
+          <Button type="primary" icon={<SearchOutlined />} onClick={()=>searchData()}>
+            搜索
+          </Button>
+        </div>
+      </div>
         <Modal
           forceRender
           
@@ -354,7 +379,7 @@ const StudentManager = (props) => {
         />
       </div>
 
-    </div>
+  
   );
 }
 

@@ -85,11 +85,6 @@ const Home = (props)=> {
         title:"电费管理",
         key:"electricManager"
       },{
-        path:"/userInfoManager",
-        icon:<UserAddOutlined/>,
-        title:"个人信息管理",
-        key:"userInfoManager"
-      },{
         path:"/dormManager",
         icon:<ShopOutlined/>,
         title:"寝室信息管理",
@@ -114,6 +109,11 @@ const Home = (props)=> {
         icon:<ToolOutlined/>,
         title:"学生信息管理",
         key:"studentManager"
+      },{
+        path:"/analysis",
+        icon:<ToolOutlined/>,
+        title:"学生信息管理",
+        key:"analysis"
       }])
       break;
       case 2: setMenuData([{
@@ -169,10 +169,10 @@ const Home = (props)=> {
         title:"个人信息管理",
         key:"userInfoManager"
       },{
-        path:"/dormrepair",
-        icon:<UserAddOutlined/>,
-        title:"寝室报修",
-        key:"dormrepair"
+        path:"/repairManager",
+        icon:<ToolOutlined/>,
+        title:"报修管理",
+        key:"repairManager"
       }])
       break;
     }

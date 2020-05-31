@@ -4,21 +4,24 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { Table, Radio, Divider, Button, Modal, Form, Input ,DatePicker} from 'antd';
 
-import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutline } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, PlusOutlined,FormOutlined,CloseSquareOutlined } from '@ant-design/icons';
 import './index.scss';
 //4.1对应映射的字段 
 const mapState = ({visitManager}) => ({
   listData:visitManager.listData,
   page_no:visitManager.page_no,
   page_size:visitManager.page_size,
-  total:visitManager.total
-
+  total:visitManager.total,
+  userInfo:visitManager.userInfo,
 
 });
 //4.2需要使用的http api接口 和 需要使用的方法
 const mapDispatch = ( {visitManager} ) => ({
   saveVisitorinfo:visitManager.saveVisitorinfo,
-  getVisitorinfo:visitManager.getVisitorinfo
+  getVisitorinfo:visitManager.getVisitorinfo,
+  deleteData: visitManager.deleteData,
+  getVisitorinfobyId:visitManager.getVisitorinfobyId,
+  updateVisitorinfobyid:visitManager.updateVisitorinfobyid
 });
 
 const VisitManager = (props)=> {
@@ -29,6 +32,7 @@ const VisitManager = (props)=> {
     }
     props.getVisitorinfo(prams);
   },[]);
+ 
   useEffect(()=>{
     console.log(props.page_no);
   },[props.page_no]);
@@ -51,6 +55,23 @@ const VisitManager = (props)=> {
       listData:props.listData
     });
   },[props.listData]);
+  const [form] = Form.useForm();
+  useEffect(() => {
+   
+    // setState({
+    //   ...state,
+    //   listData:props.listData
+    // });
+    console.log(props.userInfo.user);
+    console.log(moment(props.userInfo.user.update_time, 'YYYY-MM-DD HH:mm:ss'));
+    if(state.visible){
+      form.setFieldsValue({user:{
+        ...props.userInfo.user,
+       "update_time":moment(props.userInfo.user.update_time, 'YYYY-MM-DD HH:mm:ss')
+      }});
+    }
+    
+  }, [props.userInfo]);
     const columns = [
         {
           title: '访客姓名',
@@ -69,44 +90,17 @@ const VisitManager = (props)=> {
           align:"center"
         },{
           title: '来访时间',
-          dataIndex: 'create_time',
+          dataIndex: 'update_time',
           align:"center"
+        }, {
+          title: '操作',
+          align:"center",
+    
+          dataIndex: '',
+          key: 'x',
+          render: (text, record) => <div className="eidt_btn_wrap"><FormOutlined className="edit_btn" onClick={()=>openlayer("修改信息",record.id)}/><CloseSquareOutlined onClick={()=>handleDelete(record.id)}/></div>,
         },
       ];
-      const data = [
-        {
-          key: '0',
-          name: 'John Brown',
-          phone: 123923723780,
-          
-          studentName:"dsh",
-          createTime:"2020/0811"
-        },
-        {
-          key: '1',
-          name: 'John Brown',
-          phone: 123923723780,
-          
-          studentName:"dsh",
-          createTime:"2020/0811"
-        },
-        {
-          key: '2',
-          name: 'John Brown',
-          phone: 123923723780,
-          
-          studentName:"dsh",
-          createTime:"2020/0811"
-        },
-        {
-          key: '3',
-          name: 'John Brown',
-          phone: 123923723780,
-          
-          studentName:"dsh",
-          createTime:"2020/0811"
-        },
-      ]; // rowSelection object indicates the need for row selection
       
       const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -118,38 +112,117 @@ const VisitManager = (props)=> {
           name: record.name,
         }),
       };
+    
       const onFinish = values => {
-        console.log(moment(values.visitor.createTime).format('YYYY-MM-DD HH:mm:ss') );
-        let parmas = {
-          phone:values.visitor.phone,
-          student_name:values.visitor.student_name,
-          name:values.visitor.name,
-          remark:values.visitor.remark,
-          visit_time:moment(values.visitor.createTime).format('YYYY-MM-DD HH:mm:ss')
-        }
-        props.saveVisitorinfo(parmas,()=>{
-          setState({
-            ...state,
-            loading: true
-          });
-          setTimeout(() => {
-            setState({
-              ...state,
-              loading: false,
-              visible: false
-            });
-          }, 1000);
+          console.log(moment(values.user.createTime).format('YYYY-MM-DD HH:mm:ss'));
+
           let prams = {
-            page_size:props.page_size,
-            page_no:props.page_no
+            phone:values.user.phone,
+            student_name:values.user.student_name,
+            name:values.user.name,
+            remark:values.user.remark,
+            update_time:moment(values.user.createTime).format('YYYY-MM-DD HH:mm:ss')
           }
-          props.getVisitorinfo(prams);
+          if(state.modelTitle==="修改信息"){
+            console.log(prams);
+            
+            prams={...prams,id:state.id};
+            props.updateVisitorinfobyid(prams,()=>{
+              setState({
+                ...state,
+                loading: true
+              });
+              setTimeout(() => {
+                setState({
+                  ...state,
+                  loading: false,
+                  visible: false
+                });
+                console.log(prams);
+                form.setFieldsValue({user:{
+                  phone:'',
+                  student_name:"",
+                  name:"",
+                  remark:"",
+                 
+                  "update_time":moment(prams.update_time, 'YYYY-MM-DD HH:mm:ss')
+                }});
+                // form.resetFields();
+              }, 1000);
+              let data = {
+                page_size:props.page_size,
+                page_no:props.page_no
+              }
+              props.getVisitorinfo(data);
+      
+          });
+          }else{
+            props.saveVisitorinfo(prams,()=>{
+              setState({
+                ...state,
+                loading: true
+              });
+              setTimeout(() => {
+                setState({
+                  ...state,
+                  loading: false,
+                  visible: false
+                });
+                form.setFieldsValue({user:{
+                  phone:'',
+                  student_name:"",
+                  name:"",
+                  remark:"",
+                 
+                  "update_time":moment(prams.update_time, 'YYYY-MM-DD HH:mm:ss')
+                }});
+                // form.resetFields();
+              }, 1000);
+              let data = {
+                page_size:props.page_size,
+                page_no:props.page_no
+              }
+              props.getVisitorinfo(data);
+      
+          });
+      
+          }
+          
+          
+         
+        };
+      
+        // let parmas = {
+        //   phone:values.visitor.phone,
+        //   student_name:values.visitor.student_name,
+        //   name:values.visitor.name,
+        //   remark:values.visitor.remark,
+        //   update_time:moment(values.visitor.createTime).format('YYYY-MM-DD HH:mm:ss')
+        // }
+        // props.saveVisitorinfo(parmas,()=>{
+        //   setState({
+        //     ...state,
+        //     loading: true
+        //   });
+        //   setTimeout(() => {
+        //     setState({
+        //       ...state,
+        //       loading: false,
+        //       visible: false
+        //     });
+        //     form.resetFields();
+        //   }, 1000);
+        //   let prams = {
+        //     page_size:props.page_size,
+        //     page_no:props.page_no
+        //   }
+        //   props.getVisitorinfo(prams);
 
 
-        });
+        // });
 
         
-      };
+   
       const layout = {
         labelCol: {
           span: 6,
@@ -168,10 +241,10 @@ const VisitManager = (props)=> {
       }
       props.getVisitorinfo(prams);
     }
-      const addUser = (<Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages} initialValues = {props.userInfo}>
+      const addUser = (<Form {...layout} form={form} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages} initialValues = {props.userInfo}>
 
       <Form.Item
-        name={['visitor', 'name']}
+        name={['user', 'name']}
         label="访客姓名"
         rules={[
           {
@@ -182,7 +255,7 @@ const VisitManager = (props)=> {
         <Input />
       </Form.Item>
       <Form.Item
-        name={['visitor', 'phone']}
+        name={['user', 'phone']}
      
         label="访客联系方式"
         rules={[
@@ -195,7 +268,7 @@ const VisitManager = (props)=> {
       </Form.Item>
      
       <Form.Item 
-      name={['visitor', 'student_name']}
+      name={['user', 'student_name']}
      
   
       label="学生姓名"
@@ -207,7 +280,7 @@ const VisitManager = (props)=> {
         <Input />
       </Form.Item>
       <Form.Item 
-      name={['visitor', 'visit_time']}
+      name={['user', 'update_time']}
      
   
       label="来访时间"
@@ -218,7 +291,7 @@ const VisitManager = (props)=> {
       ]}>
         <DatePicker showTime placeholder="请选择时间" format="YYYY-MM-DD HH:mm:ss"/>
       </Form.Item>
-      <Form.Item name={['visitor', 'remark']} label="备注" 
+      <Form.Item name={['user', 'remark']} label="备注" 
        
         >
       <Input.TextArea />
@@ -238,22 +311,46 @@ const VisitManager = (props)=> {
         ...state,
         visible: false
       });
+      form.setFieldsValue({user:{
+        phone:'',
+        student_name:"",
+        name:"",
+        remark:"",
+       
+        
+      }});
+      // form.resetFields();
     };
-    const openlayer = (val) => {
-      console.log(val);
+    const openlayer = (val,id) => {
+      if(id>=0){
+        props.getVisitorinfobyId({id});
+      }
+    
       setState({
         ...state,
         modelTitle:val,
+        id:id,
         visible: true
       });
     }
-    const handleDelete = (key)=>{
-      let nowData = state.listData.filter(item=>{
-        console.log(key);
-          return(item.key!==key);
+    const handleDelete = (id)=>{
+      // let nowData = state.listData.filter(item=>{
+      //   console.log(id);
+      //     return(item.id!==id);
+      // });
+      // console.log(nowData);
+      let arr=[];
+      arr.push(id);
+      props.deleteData({
+        ids:arr
+      },()=>{
+        let prams = {
+          page_size:props.page_size,
+          page_no:props.page_no
+        }
+        props.getVisitorinfo(prams);
+        
       });
-      console.log(nowData);
-      props.deleteData(nowData);
     }
 
     return (
@@ -267,6 +364,7 @@ const VisitManager = (props)=> {
 
         </div>
         <Modal
+          forceRender
           title={state.modelTitle}
           visible={state.visible}
           closable={false}

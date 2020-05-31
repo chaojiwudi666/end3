@@ -1,75 +1,102 @@
-import {} from '../../services';
+import { savehygieneinfo, gethygieneinfo, gethygieneinfobyid, updatehygieneinfobyid, deletehygieneinfobyids } from '../../services';
 import Actions from '../../utils/index';
-
+import { message } from 'antd';
+message.config({
+    top: 20,
+    duration: 1,
+    maxCount: 3,
+    rtl: true,
+});
 //3.3添加接口实现
 const effects = dispatch => ({
-    // async TravelInitInfo(prams, state) {
-       
-    //     let pram = {
-    //         appId: prams,
-    //     };
-    //     let res = await TravelInitInfo(pram);
-   
-    //     dispatch({
-    //         type: 'home/TRAVEL_INIT_INFO',
-    //         payload: {
-    //             initInfo: res.data.Data,
-    //         }
-    //     });
-    // },
-    // async GetTravelIndexPage(prams, state) {
-       
+    async gethygieneinfo(prams, state, callback) {
+
+
+        let res = await gethygieneinfo(prams);
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+            let listData = [];
+            let page_no = 0;
+            if (res.data.data.length === 0) {
+                let data = await gethygieneinfo({ ...prams, page_no: prams.page_no > 1 ? prams.page_no - 1 : 1 })
+                listData = Actions.formateListData(data.data.data);
+                page_no = data.data.page_no;
+            } else {
+                listData = Actions.formateListData(res.data.data);
+                page_no = res.data.page_no;
+            }
+           
+         
         
-    //     let res = await GetTravelIndexPage(prams);
-   
-    //     dispatch({
-    //         type: 'home/TRAVEL_CONTENT_INFO',
-    //         payload: {
-    //             contentInfo: res.data.Data,
-    //         }
-    //     });
-    // },
-    // async GetTravelFooter(prams, state) {
-       
-    //     let pram = {
-    //         appId: prams,
-    //     };
-    //     let res = await GetTravelFooter(pram);
-        
-    //     dispatch({
-    //         type: 'home/TRAVEL_BOTTOM_INFO',
-    //         payload: {
-    //             bottomInfo: res.data.Data,
-    //         }
-    //     });
-        
-    // }, async getHotActivities(prams, state) {
-        
-       
-    //     let res = await GetTravelContentListBase({
-    //         pageNo: 1,
-    //         appId : prams.appId,
-    //         pageSize: prams.pageSize,
-    //         modilarId :prams.modilarId
-    //     });    
-    //     dispatch({
-    //         type: 'home/GET_INFOLIST',
-    //         payload: {                
-    //             infoList: res.data.Data.Contents, 
-    //             pageSize:prams.pageSize,
-               
-    //             isHasMore:res.data.Data.length&&(res.data.Data.length%10===0)?true:false                                      
-    //         }
-    //     });
-    // },async postTravelPraise(prams, state) {                   
-        
-      
-    //     let res = await TravelPraise({requestParams:Actions.DES(JSON.stringify(prams)).toString()});
-    //     console.log(res);
-        
-        
-   
-    // }
+            dispatch({
+                type: 'hygieneManager/GET_LISTDATA',
+                payload: {
+                    listData: listData,
+                    total: res.data.total,
+                    page_no: page_no
+                }
+            });
+
+        }
+
+    }, async savehygieneinfo(prams, state, callback) {
+
+
+        let res = await savehygieneinfo(prams);
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+            callback && callback();
+        }
+        console.log(res);
+    }, async deleteData(prams, state, callback) {
+        let res = await deletehygieneinfobyids(prams);
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+            callback && callback();
+            // dispatch({
+            //     type: 'systemManager/DELETE_DATA',
+            //     payload: {
+            //         data: prams,
+            //     }
+            // });
+        }
+
+    }, async gethygieneinfobyId(prams, state, callback) {
+
+
+        let res = await gethygieneinfobyid(prams);
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+
+            dispatch({
+                type: 'hygieneManager/GET_USERINFO',
+                payload: {
+                    userInfo: {
+                        user: {
+                            ...res.data.data[0]       
+                        }
+
+                    }
+                }
+            });
+        }
+
+    },
+    async updatehygieneinfobyid(prams, state, callback) {
+
+
+        let res = await updatehygieneinfobyid(prams);
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+            callback && callback();
+
+        }
+    }
 
 });
 

@@ -44,6 +44,19 @@ export const getmaintenanceinfo = prams => axios.post('/api/maintenanceinfo/getm
 export const getmaintenanceinfobyid = prams => axios.post('/api/maintenanceinfo/getmaintenanceinfobyid', prams);
 export const updatemaintenanceinfobyid = prams => axios.post('/api/maintenanceinfo/updatemaintenanceinfobyid', prams);
 export const deletemaintenanceinfobyids = prams => axios.post('/api/maintenanceinfo/deletemaintenanceinfobyids', prams);
+export const updatemaintenancestatebyid = prams => axios.post('/api/maintenanceinfo/updatemaintenancestatebyid', prams);
+
+//卫生管理hygiene_info
+export const savehygieneinfo = prams => axios.post('/api/hygieneinfo/savehygieneinfo', prams);
+export const gethygieneinfo = prams => axios.post('/api/hygieneinfo/gethygieneinfo', prams);
+export const gethygieneinfobyid = prams => axios.post('/api/hygieneinfo/gethygieneinfobyid', prams);
+export const updatehygieneinfobyid = prams => axios.post('/api/hygieneinfo/updatehygieneinfobyid', prams);
+export const deletehygieneinfobyids = prams => axios.post('/api/hygieneinfo/deletehygieneinfobyids', prams);
+export const gethygienenum = prams => axios.post('/api/hygieneinfo/gethygienenum', prams);
+
+
+//个人信息管理
+export const updatestudentpassword = prams => axios.post('/api/studentinfo/updatestudentpassword', prams);
 
 
 

@@ -1,0 +1,36 @@
+.hygieneManager{
+
+   
+        .top_btn{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .btn_wrap{
+                width: 145px;
+                height: 30px;
+                margin-top: 20px;
+                margin-left: 20px;
+            }
+           .search_wrap{
+                display: flex;
+                height: 30px;
+                margin-top: 20px;
+                margin-right: 20px;
+                .search_input{
+                    margin-right: 10px;
+                }
+    
+           }
+    
+    
+        }
+        .eidt_btn_wrap{
+            font-size: 22px;
+            .edit_btn{
+                margin-right: 5px;
+            }
+          
+        }
+        
+    
+    }

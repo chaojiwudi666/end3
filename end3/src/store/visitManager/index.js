@@ -3,13 +3,13 @@ import effects from './effects';
 
 //3.2 定义store里面dispatch的字段
 export const state = {
-  visitInfo:{
-    visitor:{
+  userInfo:{
+    user:{
       phone:'',
       student_name:"",
       name:"",
       remark:"",
-      visit_time:""
+      update_time:""
     }
     
   },

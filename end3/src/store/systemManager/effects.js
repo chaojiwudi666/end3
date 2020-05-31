@@ -33,8 +33,6 @@ const effects = dispatch => ({
                 item.role_id="管理员";
             }else if(item.role_id===2){
                 item.role_id="宿管员"
-            }else if(item.role_id===4){
-                item.role_id="学生"
             }
         });
      

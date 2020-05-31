@@ -1,13 +1,36 @@
-import {updatestudentpassword} from '../../services';
+import {gethygienenum} from '../../services';
 import Actions from '../../utils/index';
-
+import { message } from 'antd';
+message.config({
+    top: 20,
+    duration: 1,
+    maxCount: 3,
+    rtl: true,
+});
 //3.3添加接口实现
 const effects = dispatch => ({
-    async updatestudentPassword(prams, state) {
+    async gethygieneNum(prams, state,callback) {
        
     
-        let res = await updatestudentpassword(prams);
-   
+        let res = await gethygienenum();
+        if (res.data.state < 0) {
+            message.error(res.data.message.name);
+        } else {
+            dispatch({
+                type: 'analysis/GET_DATA',
+                payload: {
+                    data: res.data.data,
+                }
+            });
+    
+            callback && callback();
+            // dispatch({
+            //     type: 'systemManager/DELETE_DATA',
+            //     payload: {
+            //         data: prams,
+            //     }
+            // });
+        }
         
     },
     // async GetTravelIndexPage(prams, state) {
